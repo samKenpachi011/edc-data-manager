@@ -1,0 +1,18 @@
+{% load crypto_tags %}
+{% load url from future %}
+{% load admin_urls %}
+
+   <tr><td>
+   <A href="{% url action_item_meta|admin_urlname:'add' %}?next={{ subject_dashboard_url|default:"subject_dashboard_url" }}&dashboard_type={{dashboard_type}}&dashboard_model={{dashboard_model}}&dashboard_id={{dashboard_id}}&show=appointments&registered_subject={{ registered_subject.pk }}">Add</A>
+   &nbsp;|&nbsp;<A href="{% url action_item_meta|admin_urlname:'changelist' %}?q={{ registered_subject.pk }}">See all</A>
+   </td></tr>
+   <tr class="{% cycle 'row1' 'row2' %}">
+       {% for action_item in action_items %}
+           <td style="width:10px;text-align:left;"><span {% if action_item.status == 'open' %} style="background-color:RED;"{% endif %}>&nbsp;</span>{{ forloop.counter }}.&nbsp;
+           <A href="{% url action_item_meta|admin_urlname:'change' action_item.pk %}?next={{ subject_dashboard_url|default:"subject_dashboard_url" }}&dashboard_type={{dashboard_type}}&dashboard_model={{dashboard_model}}&dashboard_id={{dashboard_id}}&show=appointments&registered_subject={{ registered_subject.pk }}">{{action_item.subject }}</A>
+           <BR> {{action_item.comment|encrypted }} 
+           <BR><i><small>Updated on {{ action_item.modified|date:"SHORT_DATE_FORMAT" }}   
+                by {{ action_item.user_modified }}</small></i>       
+           </td>  
+        {% endfor %}
+   </tr>

@@ -1,0 +1,23 @@
+.long-lbl + label {
+  float: none !important;
+  width: 80% !important;
+  margin-bottom: 10px !important;
+}
+
+.long-lbl ~ input,
+.long-lbl ~ .selector { 
+  margin-left: 10em             !important;
+}
+
+.relative {
+  position: relative             !important;
+}
+
+.relative .add-help,
+.relative .edit-help {
+  position: absolute            !important;
+  top: 10px             !important;
+  right: 30px             !important;
+}
+
+
