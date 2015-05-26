@@ -18,4 +18,4 @@ class Comment(BaseModel):
     objects = models.Manager()
 
     class Meta:
-        app_label = "data_manager"
+        app_label = "edc_data_manager"

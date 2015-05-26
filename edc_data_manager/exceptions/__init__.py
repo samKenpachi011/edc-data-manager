@@ -1,0 +1,3 @@
+
+class FormExporterError(Exception):
+    pass

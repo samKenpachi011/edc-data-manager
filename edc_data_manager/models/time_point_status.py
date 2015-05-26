@@ -5,7 +5,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django_crypto_fields.fields import EncryptedTextField
 
-from edc_audit.audit_trail import AuditTrail
+# from edc_audit.audit_trail import AuditTrail
+from simple_history.models import HistoricalRecords
 from edc_base.model.models import BaseUuidModel
 # try:
 #     from edc.device.dispatch.models import BaseDispatchSyncUuidModel as BaseSyncUuidModel
@@ -76,7 +77,8 @@ class TimePointStatus(SyncMixin, BaseUuidModel):
 
     objects = TimePointStatusManager()
 
-    history = AuditTrail()
+    # history = AuditTrail()
+    history = HistoricalRecords()
 
     def __unicode__(self):
         return "{}: {}".format(self.appointment, self.status.upper())
