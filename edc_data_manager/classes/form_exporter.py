@@ -2,13 +2,13 @@ from collections import OrderedDict
 
 from django.contrib import admin
 from django.core.exceptions import FieldError
-from django.db.models import get_app, get_models, get_model
+from django.apps import apps
 
-from edc.base.model.fields.helpers.revision import site_revision
-from edc.subject.visit_schedule.models import VisitDefinition
-from edc.subject.entry.models import Entry, LabEntry
-from edc.subject.rule_groups.classes import site_rule_groups
-from edc.subject.visit_schedule.classes import site_visit_schedules
+from django_revision.revision import site_revision
+from edc_visit_schedule.models import VisitDefinition
+from edc_entry.models import Entry, LabEntry
+from edc_rule_groups.classes import site_rule_groups
+from edc_visit_schedule.classes import site_visit_schedules
 
 from ..exceptions import FormExporterError
 
@@ -43,7 +43,7 @@ class FormExporter(object):
 
         Is reset if model class changes."""
         if not self._model_admin:
-            for model_admin in admin.sites.site._registry.itervalues():
+            for model_admin in admin.sites.site._registry.values():
                 if model_admin.model == self.model:
                     self._model_admin = model_admin
                     break
@@ -90,13 +90,13 @@ class FormExporter(object):
         question = self.fields.get(name)
         try:
             for choice in question.choices:
-                print choice[1]
+                print(choice[1])
         except AttributeError:
-            print '___________'
-        print 'Simple Errors:'
-        for a, b in question.error_messages.iteritems():
-            print a, unicode(b)
-        print unicode(question)
+            print('___________')
+        print('Simple Errors:')
+        for a, b in question.error_messages.items():
+            print(a, str(b))
+        print(str(question))
 
     @property
     def form(self):
@@ -108,18 +108,18 @@ class FormExporter(object):
                 template.append('<p><B>Instructions: </B>{}</p>'.format(''.join(self.model_admin.instructions)))
         except AttributeError:
             pass
-        for attr_name, field in self.fields.iteritems():
+        for attr_name, field in self.fields.items():
             template.append('{bold}{}. {}{bold}'.format(
-                field.number, unicode(field.verbose_name), bold='\'\'\'' if not field.null else ''))
+                field.number, str(field.verbose_name), bold='\'\'\'' if not field.null else ''))
             choices = ''
             extra = ''
             for choice in field.choices:
-                choices += '* {}\n'.format(unicode(choice[1]))
+                choices += '* {}\n'.format(str(choice[1]))
             try:
                 # if m2m, try to get to the list model to populate choices
                 list_model = getattr(self.model, field.name).field.related.parent_model
                 for obj in list_model.objects.all().order_by('display_index'):
-                    choices += '* {}\n'.format(unicode(obj.name))
+                    choices += '* {}\n'.format(str(obj.name))
                     # choices += '* {}\n'.
                 extra = 'select multiple options'
             except AttributeError:
@@ -135,7 +135,7 @@ class FormExporter(object):
                 except AttributeError:
                     template.append(': ___________')
             if field.help_text:
-                template.append('\'\'{}\'\'\n'.format(unicode(field.help_text)))
+                template.append('\'\'{}\'\'\n'.format(str(field.help_text)))
         if self.interform_logic:
             template.append('=====Interform rules (Rule Groups)=====')
             template.append(self.interform_logic)
@@ -152,7 +152,7 @@ class FormExporter(object):
             visit_definition = VisitDefinition.objects.get(code=code)
         except VisitDefinition.DoesNotExist:
             raise FormExporterError('VisitDefinition matching query does not exist. Got {}.'.format(code))
-        print '==={0.code}: {0.title}==='.format(visit_definition)
+        print('==={0.code}: {0.title}==='.format(visit_definition))
         for entry in Entry.objects.filter(visit_definition=visit_definition).order_by('entry_order'):
             self.model = entry.content_type_map.model_class()
             forms.append(self.form)
@@ -162,9 +162,9 @@ class FormExporter(object):
 
     def export_by_app(self, app_label):
         forms = []
-        app = get_app(app_label)
-        models = get_models(app)
-        print '===Forms for {}==='.format(app_label)
+        app = apps.get_app(app_label)
+        models = apps.get_models(app)
+        print('===Forms for {}==='.format(app_label))
         for model in models:
             if 'Audit' not in model._meta.object_name:
                 self.model = model
@@ -173,7 +173,7 @@ class FormExporter(object):
 
     def export_by_model(self, app_label, model_name):
         forms = []
-        self.model = get_model(app_label, model_name)
+        self.model = apps.get_model(app_label, model_name)
         forms.append(self.form)
         return forms
 

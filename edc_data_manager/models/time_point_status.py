@@ -141,6 +141,6 @@ class TimePointStatus(SyncMixin, BaseUuidModel):
     dashboard.allow_tags = True
 
     class Meta:
-        app_label = "data_manager"
+        app_label = "edc_data_manager"
         verbose_name = "Time Point Completion"
         verbose_name_plural = "Time Point Completion"
