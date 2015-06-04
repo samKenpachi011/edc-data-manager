@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from edc_constants.constants import CLOSED, OPEN
 from edc_registration.models import RegisteredSubject
 
-from ..classes import data_manager
+# from ..classes import data_manager
 from ..forms import ActionItemForm
 from ..models import ActionItem
 
@@ -25,7 +25,7 @@ class ActionItemAdmin(BaseAdmin):
     def save_model(self, request, obj, form, change):
         # check for data_manager user groups
         # group = data_manager.prepare()
-        data_manager.check_groups()
+        # data_manager.check_groups()
         user = request.user
         if not user.is_superuser:
             # A user should be able to assign an action item to any other user group

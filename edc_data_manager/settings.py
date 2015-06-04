@@ -39,6 +39,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'edc_content_type_map',
+    'edc_registration',
+    'edc_entry',
+    'edc_visit_schedule',
     'edc_data_manager',
 )
 
@@ -71,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'wsgi.application'
+WSGI_APPLICATION = 'edc_data_manager.wsgi.application'
 
 
 # Database
