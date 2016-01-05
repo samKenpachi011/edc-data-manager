@@ -11,7 +11,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='edc-data-manager',
-    version='0.1.0',
+    version='0.1.dev',
     author=u'Erik van Widenfelt',
     author_email='ew2789@gmail.com',
     packages=find_packages(),
@@ -22,9 +22,6 @@ setup(
     long_description=README,
     zip_safe=False,
     keywords='django data management',
-    install_requires=[
-        'edc-base>=0.1',
-    ],
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
@@ -34,7 +31,7 @@ setup(
         'Programming Language :: Python',
         # 'Programming Language :: Python :: 3',
         # 'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.4',
+        # 'Programming Language :: Python :: 3.4',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
