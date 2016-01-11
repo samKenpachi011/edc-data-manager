@@ -4,28 +4,33 @@ from django.contrib.auth.models import Group
 from edc_constants.constants import CLOSED, OPEN
 from edc_registration.models import RegisteredSubject
 
-# from ..classes import data_manager
-from ..forms import ActionItemForm
-from ..models import ActionItem
+from .forms import ActionItemForm
+from .models import ActionItem, Comment
 
-from .base_admin import BaseAdmin
+from .classes import data_manager
 
 
-class ActionItemAdmin(BaseAdmin):
+class CommentAdmin(admin.ModelAdmin):
+        pass
+admin.site.register(Comment, CommentAdmin)
+
+
+class ActionItemAdmin(admin.ModelAdmin):
 
     form = ActionItemForm
 
-    def __init__(self, *args, **kwargs):
-        super(ActionItemAdmin, self).__init__(*args, **kwargs)
-        self.search_fields.insert(0, 'registered_subject__pk')
-        self.search_fields.insert(0, 'registered_subject__subject_identifier')
-        self.list_display.insert(1, 'dashboard')
-        self.list_filter.append('action_group')
+    fields = ['subject', 'comment', 'rt']
+
+    list_display = ['created', 'subject', 'dashboard', 'rt', 'status', 'user_created', 'user_modified', 'modified']
+
+    list_filter = ['status', 'action_group', 'created', 'user_created', 'modified', 'user_modified']
+
+    search_fields = ('registered_subject__pk', 'registered_subject__subject_identifier')
 
     def save_model(self, request, obj, form, change):
         # check for data_manager user groups
         # group = data_manager.prepare()
-        # data_manager.check_groups()
+        data_manager.check_groups()
         user = request.user
         if not user.is_superuser:
             # A user should be able to assign an action item to any other user group

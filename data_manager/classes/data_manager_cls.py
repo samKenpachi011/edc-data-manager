@@ -28,13 +28,9 @@ class DataManagerCls(object):
         """Raises error if 'data_manager' and 'action_manager' groups are missing."""
 
         if not Group.objects.filter(name='data_manager').exists():
-            raise ImproperlyConfigured(
-                'Group \'data_manager\' does not exist. Add data_manager.prepare() to '
-                'your urls.py before admin.autodiscover(). See data_manager.')
+            raise ImproperlyConfigured('Group \'data_manager\' does not exist. Add data_manager.prepare() to your urls.py before admin.autodiscover(). See data_manager.')
         if not Group.objects.filter(name='action_manager').exists():
-            raise ImproperlyConfigured(
-                'Group \'action_manager\' does not exist. Add data_manager.prepare() to '
-                'your urls.py before admin.autodiscover(). See data_manager.')
+            raise ImproperlyConfigured('Group \'action_manager\' does not exist. Add data_manager.prepare() to your urls.py before admin.autodiscover(). See data_manager.')
         return True
 
 data_manager = DataManagerCls()
