@@ -3,7 +3,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.db import IntegrityError
 
 
-class DataManagerCls(object):
+class DataManager(object):
     def prepare(self):
         """Adds 'data_manager' and 'action_manager' groups if missing.
 
@@ -11,7 +11,7 @@ class DataManagerCls(object):
 
         Add this to project urls.py before admin.autodiscover()::
 
-            from edc.data_manager.classes import data_manager
+            from edc_data_manager.data_manager import data_manager
             data_manager.prepare()
         """
 
@@ -28,9 +28,13 @@ class DataManagerCls(object):
         """Raises error if 'data_manager' and 'action_manager' groups are missing."""
 
         if not Group.objects.filter(name='data_manager').exists():
-            raise ImproperlyConfigured('Group \'data_manager\' does not exist. Add data_manager.prepare() to your urls.py before admin.autodiscover(). See data_manager.')
+            raise ImproperlyConfigured(
+                'Group \'data_manager\' does not exist. Add data_manager.prepare() '
+                'to your urls.py before admin.autodiscover(). See data_manager.')
         if not Group.objects.filter(name='action_manager').exists():
-            raise ImproperlyConfigured('Group \'action_manager\' does not exist. Add data_manager.prepare() to your urls.py before admin.autodiscover(). See data_manager.')
+            raise ImproperlyConfigured(
+                'Group \'action_manager\' does not exist. Add data_manager.prepare() '
+                'to your urls.py before admin.autodiscover(). See data_manager.')
         return True
 
-data_manager = DataManagerCls()
+data_manager = DataManager()

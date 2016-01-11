@@ -7,7 +7,7 @@ from edc_registration.models import RegisteredSubject
 from .forms import ActionItemForm
 from .models import ActionItem, Comment
 
-from .classes import data_manager
+from .data_manager import data_manager
 
 
 class CommentAdmin(admin.ModelAdmin):
