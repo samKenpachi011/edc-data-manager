@@ -19,7 +19,9 @@ class ActionItemAdmin(admin.ModelAdmin):
 
     form = ActionItemForm
 
-    fields = ['subject', 'comment', 'rt']
+    fields = [
+        'registered_subject', 'subject', 'action_date', 'expiration_date', 'action_priority',
+        'status', 'comment', 'action_group', 'rt']
 
     list_display = ['created', 'subject', 'dashboard', 'rt', 'status', 'user_created', 'user_modified', 'modified']
 
