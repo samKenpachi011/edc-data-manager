@@ -43,9 +43,7 @@ INSTALLED_APPS = [
     'edc_appointment',
     'edc_base',
     'edc_configuration',
-    #'edc_consent',
     'edc_content_type_map',
-    #'edc_crypto_fields',
     'edc_data_manager',
     'edc_export',
     'edc_lab.lab_clinic_api',
@@ -54,7 +52,6 @@ INSTALLED_APPS = [
     'edc_quota',
     'edc_registration',
     'edc_sync',
-    #'edc_testing',
     'edc_visit_schedule',
     'edc_visit_tracking',
 ]

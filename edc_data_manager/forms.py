@@ -7,7 +7,7 @@ from .models import ActionItem
 
 class ActionItemForm(forms.ModelForm):
 
-    #action_group = forms.ChoiceField(
+    # action_group = forms.ChoiceField(
     #    label='Action group',
     #    choices=[
     #        (item.get('name'), ' '.join(
