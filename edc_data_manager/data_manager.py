@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from django.core.exceptions import ImproperlyConfigured
 from django.db import IntegrityError
-from django.db.utils import OperationalError
+from django.db.utils import OperationalError, ProgrammingError
 
 
 class DataManager(object):
@@ -22,11 +22,15 @@ class DataManager(object):
             pass
         except OperationalError:
             pass
+        except ProgrammingError:
+            pass
         try:
             Group.objects.create(name='action_manager')
         except IntegrityError:
             pass
         except OperationalError:
+            pass
+        except ProgrammingError:
             pass
 
     def check_groups(self):
