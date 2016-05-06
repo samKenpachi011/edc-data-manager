@@ -7,13 +7,14 @@ from edc_base.encrypted_fields import EncryptedTextField
 from edc_base.model.models import BaseModel
 from edc_constants.constants import CLOSED, OPEN
 from edc_registration.models import RegisteredSubject
+from django.core.exceptions import ValidationError
 
 
 class Comment(BaseModel):
 
     subject = models.CharField(max_length=50)
 
-    comment_date = models.DateField(default=date.today())
+    comment_date = models.DateField(default=date.today)
 
     comment = EncryptedTextField(max_length=500)
 
@@ -37,13 +38,13 @@ class ActionItem(BaseModel):
 
     subject = models.CharField(verbose_name='Subject line', max_length=50, unique=True)
 
-    action_date = models.DateField(verbose_name='action_date', default=date.today())
+    action_date = models.DateField(verbose_name='action_date', default=date.today)
 
     expiration_date = models.DateField(
-        default=date.today() + timedelta(days=90),
+        null=True,
         help_text=(
             'Data note will automatically be set to '
-            '\'Resolved\' in 90 days unless otherwise specified.'))
+            'expire in 30 days from the action date unless otherwise specified.'))
 
     comment = EncryptedTextField(max_length=500)
 
@@ -70,6 +71,14 @@ class ActionItem(BaseModel):
         help_text='Only data managers or study physicians can \'close\' an action item')
 
     objects = models.Manager()
+
+    def save(self, *args, **kwargs):
+        if not self.expiration_date:
+            self.expiration_date = self.action_date + timedelta(days=30)
+        else:
+            if self.expiration_date < self.action_date:
+                raise ValidationError('Expiration date cannot precede action date. Perhaps catch this in the forms.py')
+        super(ActionItem, self).save(*args, **kwargs)
 
     def dashboard(self):
         ret = None
