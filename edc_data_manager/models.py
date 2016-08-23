@@ -2,12 +2,13 @@ from datetime import date, timedelta
 
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.core.exceptions import ValidationError
 
-from edc_base.encrypted_fields import EncryptedTextField
+from django_crypto_fields.fields import EncryptedTextField
 from edc_base.model.models import BaseModel
 from edc_constants.constants import CLOSED, OPEN
-from edc_registration.models import RegisteredSubject
-from django.core.exceptions import ValidationError
+from edc_registration.mixins import RegisteredSubjectMixin
+from edc_base.model.models.base_uuid_model import BaseUuidModel
 
 
 class Comment(BaseModel):
@@ -30,11 +31,10 @@ class Comment(BaseModel):
         app_label = "edc_data_manager"
 
 
-class ActionItem(BaseModel):
+class ActionItem(RegisteredSubjectMixin, BaseUuidModel):
     """ Tracks notes on missing or required data.
 
     Note can be displayed on the dashboard"""
-    registered_subject = models.ForeignKey(RegisteredSubject)
 
     subject = models.CharField(verbose_name='Subject line', max_length=50, unique=True)
 
@@ -81,15 +81,12 @@ class ActionItem(BaseModel):
         super(ActionItem, self).save(*args, **kwargs)
 
     def dashboard(self):
-        ret = None
-        if self.registered_subject:
-            if self.registered_subject.subject_identifier:
-                url = reverse('subject_dashboard_url',
-                              kwargs={'dashboard_type': self.registered_subject.subject_type.lower(),
-                                      'dashboard_model': 'registered_subject',
-                                      'dashboard_id': self.registered_subject.pk,
-                                      'show': 'appointments'})
-                ret = """<a href="{url}" />dashboard</a>""".format(url=url)
+        url = reverse('subject_dashboard_url',
+                      kwargs={'dashboard_type': self.subject_type.lower(),
+                              'dashboard_model': 'registered_subject',
+                              # 'dashboard_id': self.registered_subject.pk,
+                              'show': 'appointments'})
+        ret = """<a href="{url}" />dashboard</a>""".format(url=url)
         return ret
     dashboard.allow_tags = True
 

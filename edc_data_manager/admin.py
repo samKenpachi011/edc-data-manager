@@ -10,11 +10,12 @@ from .models import ActionItem, Comment
 from .data_manager import data_manager
 
 
+@admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
         pass
-admin.site.register(Comment, CommentAdmin)
 
 
+@admin.register(ActionItem)
 class ActionItemAdmin(admin.ModelAdmin):
 
     form = ActionItemForm
@@ -47,11 +48,3 @@ class ActionItemAdmin(admin.ModelAdmin):
             if obj.status == CLOSED and ('data_manager' not in user_groups and 'action_manager' not in user_groups):
                 obj.status = OPEN
         super(ActionItemAdmin, self).save_model(request, obj, form, change)
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "registered_subject":
-            if request.GET.get('registered_subject'):
-                kwargs["queryset"] = RegisteredSubject.objects.filter(pk=request.GET.get('registered_subject'))
-        return super(ActionItemAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(ActionItem, ActionItemAdmin)
