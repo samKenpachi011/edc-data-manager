@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from django.utils import timezone
 
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -13,7 +14,7 @@ class Comment(BaseModel):
 
     subject = models.CharField(max_length=50)
 
-    comment_date = models.DateField(default=date.today())
+    comment_date = models.DateField(default=timezone.now)
 
     comment = EncryptedTextField(max_length=500)
 
@@ -37,7 +38,7 @@ class ActionItem(BaseModel):
 
     subject = models.CharField(verbose_name='Subject line', max_length=50, unique=True)
 
-    action_date = models.DateField(verbose_name='action_date', default=date.today())
+    action_date = models.DateField(verbose_name='action_date', default=timezone.now)
 
     expiration_date = models.DateField(
         default=date.today() + timedelta(days=90),
