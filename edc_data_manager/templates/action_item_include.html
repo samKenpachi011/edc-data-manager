@@ -3,7 +3,7 @@
 
    <tr><td>
    <A href="{% url action_item_meta|admin_urlname:'add' %}?next={{ subject_dashboard_url|default:"subject_dashboard_url" }}&dashboard_type={{dashboard_type}}&dashboard_model={{dashboard_model}}&dashboard_id={{dashboard_id}}&show=appointments&registered_subject={{ registered_subject.pk }}&instruction={{ instruction }}">Add</A>
-   &nbsp;|&nbsp;<A href="{% url action_item_meta|admin_urlname:'changelist' %}?q={{ registered_subject.pk }}&instruction={{ instruction }}">See all</A>
+   &nbsp;|&nbsp;<A href="{% url action_item_meta|admin_urlname:'changelist' %}?q={{ registered_subject.pk }}">See all</A>
    </td></tr>
    <tr class="{% cycle 'row1' 'row2' %}">
        {% for action_item in action_items %}
