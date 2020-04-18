@@ -1,8 +1,9 @@
-from django.contrib import admin
-from django.conf.urls import include, url
+from django.urls.conf import path
 
-admin.autodiscover()
+from .admin_site import edc_data_manager_admin
+
+app_name = 'edc_data_manager'
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    path('admin/', edc_data_manager_admin.urls),
 ]

@@ -1,0 +1,54 @@
+{% extends "edc_dashboard/listboard.html" %}
+{% load admin_urls %}
+{% load edc_base_extras %}
+{% load td_dashboard_extras %}
+
+{% block extra-scripts %}
+{{ block.super }}
+
+<script type="text/javascript">
+</script>
+{% endblock extra-scripts %}
+             
+{% block listboard_panel %}
+    <a id="download_td_files" title="Generate all Export" class="btn btn-sm btn-default" role="button" 
+        href="">
+            <i class="fa fa-plus fa-sm"></i> Generate TD Export
+    </a>
+    <a id="download_karabo_files" title="Generate karabo Export" class="btn btn-sm btn-default" role="button" 
+        href="">
+            <i class="fa fa-plus fa-sm"></i> Generate karabo Export
+    </a>
+    <a id="return_to_home" title="go back" class="btn btn-sm btn-default" role="button" 
+        href="/">
+            <i class="fa fa-arrow-left fa-sm"></i> Go Back
+    </a>
+
+{% endblock listboard_panel %}
+
+{% block listboard_table_button_column %}
+{% endblock listboard_table_button_column %}
+
+{% block listboard_table_header %}
+    <!-- begin results header -->
+    <th>#</th>
+    <th>Subject Identifier</th>
+    <th>Status</th>
+    <th>Action Priority</th>
+    <th>RT ticket number</th>
+    <th>Comment</th>
+    <th>Actioned Date</th>
+    <th>User Created</th>
+    <!-- end results header -->
+{% endblock listboard_table_header %}
+
+
+{% block listboard_table_columns %}
+	<td>{{ result.subject_identifier }} </td>
+	<td>{{ result.status }} </td>
+	<td>{{ result.action_priority }} </td>
+	<td>{{result.rt}}</td>
+	<td>{{result.comment_snipet}}</td>
+	<td>{{result.action_date}}</td>
+    <td nowrap>{{ result.user_created }}</td>
+{% endblock listboard_table_columns %}

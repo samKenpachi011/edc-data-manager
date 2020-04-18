@@ -1,10 +1,10 @@
 from django import forms
 
-from .models import ActionItem
+from .models import DataActionItem
 
 
-class ActionItemForm(forms.ModelForm):
+class DataActionItemForm(forms.ModelForm):
 
     class Meta:
-        model = ActionItem
+        model = DataActionItem
         fields = '__all__'
