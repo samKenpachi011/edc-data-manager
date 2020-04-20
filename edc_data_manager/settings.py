@@ -102,7 +102,7 @@ DATABASES = {
 
 # dashboards
 DASHBOARD_URL_NAMES = {
-    'data_action_item_models_url': 'data_action_item_models_url',
+    'data_manager_listboard_url': 'data_manager_listboard_url',
 }
 
 LAB_DASHBOARD_URL_NAMES = {}

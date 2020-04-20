@@ -8,7 +8,7 @@ data_manager = Navbar(name='data_manager')
 
 data_manager.append_item(
     NavbarItem(
-        name='data_manager',
+        name='data_management',
         title='Data Manager',
         label='EDC Data Manager',
         fa_icon='fa fa-data-manager',

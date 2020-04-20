@@ -1,10 +1,5 @@
-import datetime, os, re, time, threading, shutil
-
-from django.conf import settings
-from django.contrib import messages
+import re
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
 from django.db.models import Q
 from django.utils.decorators import method_decorator
 from edc_base.view_mixins import EdcBaseViewMixin
@@ -26,7 +21,7 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
     model = 'edc_data_manager.dataactionitem'
     model_wrapper_cls = DataActionItemModelWrapper
     navbar_name = 'data_manager'
-    navbar_selected_item = 'data_manager'
+    navbar_selected_item = 'data_management'
     ordering = '-modified'
     paginate_by = 10
     search_form_url = 'data_manager_listboard_url'

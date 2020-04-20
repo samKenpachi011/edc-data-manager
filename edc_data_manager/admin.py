@@ -39,7 +39,6 @@ class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'subject_identifier',
                 'action_date',
                 'action_priority',
-                'action_priority',
                 'status',
                 'comment',
                 'rt')}),
@@ -50,4 +49,4 @@ class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     list_filter = ['status', 'created', 'user_created', 'modified', 'user_modified']
 
-    search_fields = ('subject_identifier')
+    search_fields = ('subject_identifier',)

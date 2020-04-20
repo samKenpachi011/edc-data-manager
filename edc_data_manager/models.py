@@ -3,11 +3,34 @@ from django.db import models
 
 from django_crypto_fields.fields import EncryptedTextField
 from edc_base.model_mixins.base_uuid_model import BaseUuidModel
+from edc_base.sites import SiteModelMixin
 from edc_constants.constants import CLOSED, OPEN
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
+from edc_search.model_mixins import SearchSlugManager
+from edc_search.model_mixins import SearchSlugModelMixin as Base
+
+from .model_mixins import SearchSlugModelMixin
 
 
-class DataActionItem(NonUniqueSubjectIdentifierFieldMixin, BaseUuidModel):
+class SearchSlugModelMixin(Base):
+
+    def get_search_slug_fields(self):
+        fields = super().get_search_slug_fields()
+        fields.append('subject_identifier')
+        return fields
+
+    class Meta:
+        abstract = True
+
+
+class DataActionItemManager(SearchSlugManager, models.Manager):
+
+    def get_by_natural_key(self, subject_identifier):
+        return self.get(subject_identifier=subject_identifier)
+
+
+class DataActionItem(
+        NonUniqueSubjectIdentifierFieldMixin, SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
     """ Tracks notes on missing or required data.
 
     Note can be displayed on the dashboard"""
