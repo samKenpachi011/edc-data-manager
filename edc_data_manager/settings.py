@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,6 +31,8 @@ APP_NAME = 'edc_data_manager'
 
 ETC_DIR = '/etc/'
 
+SITE_ID = 1
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -45,11 +46,8 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django_extensions',
     'simple_history',
-    'edc_dashboard.apps.AppConfig',
-    'edc_subject_dashboard.apps.AppConfig',    
     'edc_device.apps.AppConfig',
     'edc_model_admin.apps.AppConfig',
-    'edc_navbar.apps.AppConfig',
     'edc_base.apps.AppConfig',
     'edc_identifier.apps.AppConfig',
     'edc_data_manager.apps.AppConfig',

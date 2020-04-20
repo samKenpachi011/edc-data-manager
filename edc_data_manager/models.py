@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 from django_crypto_fields.fields import EncryptedTextField
@@ -8,8 +9,6 @@ from edc_constants.constants import CLOSED, OPEN
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
-
-from .model_mixins import SearchSlugModelMixin
 
 
 class SearchSlugModelMixin(Base):
@@ -36,7 +35,9 @@ class DataActionItem(
     Note can be displayed on the dashboard"""
 
     action_date = models.DateField(
-        verbose_name='Action date')
+        verbose_name='Action date',
+        default=timezone.now
+        )
 
     comment = EncryptedTextField(max_length=500)
 
