@@ -33,9 +33,10 @@
     <!-- begin results header -->
     <th>#</th>
     <th>Subject Identifier</th>
+    <th>Buttons</th>
     <th>Status</th>
     <th>Action Priority</th>
-    <th>RT ticket number</th>
+    <th>Ticket number</th>
     <th>Comment</th>
     <th>Actioned Date</th>
     <th>User Created</th>
@@ -45,10 +46,22 @@
 
 {% block listboard_table_columns %}
 	<td>{{ result.subject_identifier }} </td>
+	<td style="white-space: nowrap">
+    <div class="btn-group">
+    <a title="Edit data action item" role="button" 
+       class="btn btn-default btn-sm"
+           href="{{ result.href }}">
+        <i class="fa fa-pencil-alt fa-sm"></i>
+    </a>
+      <a id="btn-subject-dashboard-{{result.subject_identifier}}" class="btn btn-primary btn-sm" role="button"   
+     title="Go to subject's dashboard" href="{% url subject_dashboard_url result.subject_identifier %}">
+     <i class="far fa-user-circle fa-sm"></i> Dashboard  <i class="fa fa-share"></i></a>
+    </div>
+	</td>
 	<td>{{ result.status }} </td>
 	<td>{{ result.action_priority }} </td>
-	<td>{{result.rt}}</td>
-	<td>{{result.comment_snipet}}</td>
+	<td>{{result.issue_number}}</td>
+	<td>{{result.object.snippet}}</td>
 	<td>{{result.action_date}}</td>
     <td nowrap>{{ result.user_created }}</td>
 {% endblock listboard_table_columns %}

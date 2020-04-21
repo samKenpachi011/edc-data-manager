@@ -8,7 +8,10 @@ from edc_model_admin import (
     ModelAdminReadOnlyMixin, ModelAdminInstitutionMixin,
     ModelAdminRedirectOnDeleteMixin)
 from edc_model_admin import audit_fieldset_tuple
-from edc_subject_dashboard import ModelAdminSubjectDashboardMixin
+
+from .forms import DataActionItemForm
+from .models import DataActionItem
+from .admin_site import edc_data_manager_admin
 
 
 class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,
@@ -17,15 +20,11 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,
                       ModelAdminAuditFieldsMixin, ModelAdminReadOnlyMixin,
                       ModelAdminInstitutionMixin,
                       ModelAdminRedirectOnDeleteMixin,
-                      ModelAdminSubjectDashboardMixin, ModelAdminSiteMixin):
+                      ModelAdminSiteMixin):
 
     list_per_page = 10
     date_hierarchy = 'modified'
     empty_value_display = '-'
-
-from .forms import DataActionItemForm
-from .models import DataActionItem
-from .admin_site import edc_data_manager_admin
 
 
 @admin.register(DataActionItem, site=edc_data_manager_admin)
@@ -45,7 +44,7 @@ class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
         audit_fieldset_tuple
     )
     
-    readonly_fields = ('issue_number', 'subject_identifier')
+    readonly_fields = ('issue_number',)
 
     list_display = ['created', 'subject_identifier', 'issue_number', 'status', 'user_created', 'user_modified', 'modified']
 

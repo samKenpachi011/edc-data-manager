@@ -9,7 +9,6 @@ from edc_constants.constants import CLOSED, OPEN
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
-from django.db.models.aggregates import Max
 
 
 class SearchSlugModelMixin(Base):
@@ -64,11 +63,14 @@ class DataActionItem(
 
     @property
     def snippet(self):
-        return '#' + str(self.issue_number) + ': ' + self.description[:12] + " ..."
+        return f'# {str(self.issue_number)}:  {self.comment}'
+
+    def __str__(self):
+        return f'#{self.issue_number}, {self.subject_identifier}'
 
     def save(self, *args, **kwargs):
         if not self.id:
-            item = self.objects.all().order_by('number').last()
+            item = self.__class__.objects.all().order_by('issue_number').last()
             if item:
                 last_item_number = item.issue_number
                 self.issue_number = last_item_number + 1
