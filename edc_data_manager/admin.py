@@ -41,11 +41,13 @@ class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'action_priority',
                 'status',
                 'comment',
-                'rt')}),
+                'issue_number')}),
         audit_fieldset_tuple
     )
+    
+    readonly_fields = ('issue_number', 'subject_identifier')
 
-    list_display = ['created', 'subject_identifier', 'rt', 'status', 'user_created', 'user_modified', 'modified']
+    list_display = ['created', 'subject_identifier', 'issue_number', 'status', 'user_created', 'user_modified', 'modified']
 
     list_filter = ['status', 'created', 'user_created', 'modified', 'user_modified']
 

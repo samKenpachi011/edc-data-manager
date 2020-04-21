@@ -9,6 +9,7 @@ from edc_constants.constants import CLOSED, OPEN
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
+from django.db.models.aggregates import Max
 
 
 class SearchSlugModelMixin(Base):
@@ -43,7 +44,9 @@ class DataActionItem(
 
     display_on_dashboard = models.BooleanField(default=True)
 
-    rt = models.IntegerField(default=0, verbose_name='RT Reference.')
+    issue_number = models.IntegerField(
+        default=0,
+        help_text="System auto field. Issue ref number.",)
 
     action_priority = models.CharField(
         max_length=35,
@@ -59,7 +62,18 @@ class DataActionItem(
 
     objects = models.Manager()
 
+    @property
+    def snippet(self):
+        return '#' + str(self.issue_number) + ': ' + self.description[:12] + " ..."
+
     def save(self, *args, **kwargs):
+        if not self.id:
+            item = self.objects.all().order_by('number').last()
+            if item:
+                last_item_number = item.issue_number
+                self.issue_number = last_item_number + 1
+            else:
+                self.issue_number = 1
         super(DataActionItem, self).save(*args, **kwargs)
 
 
