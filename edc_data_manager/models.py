@@ -63,7 +63,12 @@ class DataActionItem(
 
     @property
     def snippet(self):
-        return f'# {str(self.issue_number)}:  {self.comment}'
+        comment = ''
+        if len(self.comment) > 15:
+            comment = self.comment[:15]
+        else:
+            self.comment
+        return f'# {str(self.issue_number)}:  {comment}'
 
     def __str__(self):
         return f'#{self.issue_number}, {self.subject_identifier}'
