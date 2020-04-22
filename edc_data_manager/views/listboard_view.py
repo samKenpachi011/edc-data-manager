@@ -2,12 +2,15 @@ import re
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils.decorators import method_decorator
+
 from edc_base.view_mixins import EdcBaseViewMixin
+from edc_constants.constants import CLOSED, OPEN
 from edc_dashboard.view_mixins import ListboardFilterViewMixin, SearchFormViewMixin
 from edc_dashboard.views import ListboardView
 from edc_navbar import NavbarViewMixin
 
 from ..model_wrappers import DataActionItemModelWrapper
+from ..models import DataActionItem
 
 
 class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
@@ -32,8 +35,16 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context.update(export_add_url=self.model_cls().get_absolute_url())
+        open_action_items = DataActionItem.objects.filter(status=OPEN)
+        stalled_action_items = DataActionItem.objects.filter(status='stalled')
+        resolved_action_items = DataActionItem.objects.filter(status='resolved')
+        closed_action_items = DataActionItem.objects.filter(status=CLOSED)
+        context.update(
+            export_add_url=self.model_cls().get_absolute_url(),
+            open_action_items=open_action_items.count(),
+            stalled_action_items=stalled_action_items.count(),
+            resolved_action_items=resolved_action_items.count(),
+            closed_action_items=closed_action_items.count())
         return context
 
     def get_queryset_filter_options(self, request, *args, **kwargs):
