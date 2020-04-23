@@ -29,9 +29,10 @@
     <th>Subject Identifier</th>
     <th>Buttons</th>
     <th>Status</th>
+    <th>Assigned</th>
     <th>Action Priority</th>
     <th>Ticket number</th>
-    <th>Comment</th>
+    <th>Subject</th>
     <th>Actioned Date</th>
     <th>User Created</th>
     <!-- end results header -->
@@ -53,6 +54,7 @@
     </div>
 	</td>
 	<td>{{ result.status }} </td>
+	<td>{{ result.assigned }} </td>
 	<td>{{ result.action_priority }} </td>
 	<td>{{result.issue_number}}</td>
 	<td>{{result.object.snippet}}</td>

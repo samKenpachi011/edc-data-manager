@@ -9,6 +9,11 @@ class DataActionItemForm(forms.ModelForm):
         label='Subject identifier',
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
+    def __init__(self, *args, **kwargs):
+        super(DataActionItemForm, self).__init__(*args, **kwargs)
+        self.fields['assigned'].widget = forms.Select(choices=self.instance.assign_users)
+
+
     class Meta:
         model = DataActionItem
         fields = '__all__'

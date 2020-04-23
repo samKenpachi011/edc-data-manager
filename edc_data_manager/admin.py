@@ -36,17 +36,23 @@ class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
         (None, {
             'fields': (
                 'subject_identifier',
-                'action_date',
-                'action_priority',
+                'subject',
+                'assigned',
                 'status',
+                'action_priority',
                 'comment',
-                'issue_number')}),
+                'issue_number',
+                'action_date',)}),
         audit_fieldset_tuple
     )
+
+    radio_fields = {
+        "action_priority": admin.VERTICAL,
+        "status": admin.VERTICAL}
     
     readonly_fields = ('issue_number',)
 
-    list_display = ['created', 'subject_identifier', 'issue_number', 'status', 'user_created', 'user_modified', 'modified']
+    list_display = ['created', 'subject_identifier', 'assigned', 'issue_number', 'status', 'user_created', 'user_modified', 'modified']
 
     list_filter = ['status', 'created', 'user_created', 'modified', 'user_modified']
 
