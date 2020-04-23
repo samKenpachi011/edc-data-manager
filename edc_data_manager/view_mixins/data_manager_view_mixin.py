@@ -40,7 +40,7 @@ class DataActionItemsViewMixin(ContextMixin):
         msg = ''
         for data_action_item in data_action_items:
             msg = (f'Issue {data_action_item.issue_number}. Pending action created by'
-                   ' {data_action_item.user_created}. {data_action_item.subject}')
+                   f' {data_action_item.user_created}. {data_action_item.subject}')
             messages.add_message(
                 self.request, messages.ERROR, msg)
 
