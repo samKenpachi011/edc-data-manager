@@ -26,8 +26,8 @@ def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
                 count = 1
                 for changed_field in changed_fields:
                     change = instance.get_field_diff(changed_field)[1]
+                    msg = f"{count}. value for {changed_field} has been updated to {change}. \r\n"
                     count += 1
-                    msg = f"{count}. value for {changed_field} has been updated to {change}."
                     change_message += msg
-                message = f"{change_message} \r\n {instance.comment}"
+                message = f"{change_message} \r\n \r\n \r\n {instance.comment}"
                 instance.email_users(instance=instance, subject=subject, message=message)
