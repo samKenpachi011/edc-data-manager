@@ -1,3 +1,4 @@
+from django.apps import apps as django_apps
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -10,8 +11,21 @@ def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
     """Creates a protocol response.
     """
     if not raw:
+        emails = []
+        assigned_group = []
+        for key, value in django_apps.get_app_config('edc_data_manager').extra_assignee_choices.items():
+            if instance.assigned == key:
+                emails += value[1]
+                assigned_group += key
         if created:
-            subject = (
+            if assigned_group and emails:
+                subject = (
+                    f"Issue number: {instance.issue_number}. {instance.subject}"
+                    f" has been assigned to {instance.assigned} by {instance.user_created}")
+                message = f"{instance.comment}"
+                instance.email_users(instance=instance, subject=subject, message=message, emails=emails)
+            else:
+                subject = (
                 f"Issue number: {instance.issue_number}. {instance.subject}"
                 f" has been assigned to {instance.assigned} by {instance.user_created}")
             message = f"{instance.comment}"
@@ -31,4 +45,7 @@ def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
                     count += 1
                     change_message += msg
                 message = f"{change_message} \r\n \r\n \r\n {instance.comment}"
-                instance.email_users(instance=instance, subject=subject, message=message)
+                if assigned_group and emails:
+                    instance.email_users(instance=instance, subject=subject, message=message, emails=emails)
+                else:
+                    instance.email_users(instance=instance, subject=subject, message=message)

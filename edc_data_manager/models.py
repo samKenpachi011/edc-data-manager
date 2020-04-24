@@ -142,6 +142,9 @@ class DataActionItem(
         assignable_users_choices = ()
         user = django_apps.get_model('auth.user')
         assignable_users = user.objects.filter(groups__name='assignable users')
+        extra_choices = ()
+        for _, value in django_apps.get_app_config('edc_data_manager').extra_assignee_choices.items():
+            extra_choices += (value[0],)
         for assignable_user in assignable_users:
             username = assignable_user.username
             if not assignable_user.first_name:
@@ -150,34 +153,38 @@ class DataActionItem(
                 raise ValidationError(f"The user {username} needs to set their last name.")
             full_name = f'{assignable_user.first_name} {assignable_user.last_name}'
             assignable_users_choices += ((username, full_name),)
+        assignable_users_choices += extra_choices
         return assignable_users_choices
 
-    def email_users(self, instance=None, subject=None, message=None):
+    def email_users(self, instance=None, subject=None, message=None, emails=None):
         """Send an email to users who are related to the issue created.
         """
         user = django_apps.get_model('auth.user')
-        try:
-            assugned_user = user.objects.get(username=instance.assigned)
-        except user.DoesNotExist:
-            raise ValidationError(
-                f"The user {instance.assigned} that you have assigned the data issue {instance.issue_number}"
-                " does not exist.")
-        else:
-            assigned_email = assugned_user.email
-        try:
-            created_user = user.objects.get(username=instance.user_created)
-        except user.DoesNotExist:
-            raise ValidationError(
-                f"The user {instance.user_created} that created the data issue {instance.issue_number}"
-                " does not exist.")
-        else:
-            created_email = created_user.email
-        if created_email and assigned_email:
+        emails = emails or []
+        if not emails:
+            try:
+                assugned_user = user.objects.get(username=instance.assigned)
+            except user.DoesNotExist:
+                raise ValidationError(
+                    f"The user {instance.assigned} that you have assigned the data issue {instance.issue_number}"
+                    " does not exist.")
+            else:
+                emails += assugned_user.email
+            try:
+                created_user = user.objects.get(username=instance.user_created)
+            except user.DoesNotExist:
+                raise ValidationError(
+                    f"The user {instance.user_created} that created the data issue {instance.issue_number}"
+                    " does not exist.")
+            else:
+                emails += created_user.email
+        
+        if emails:
             send_mail(
                 subject,
                 message,
                 settings.EMAIL_HOST_USER,  # FROM
-                [assigned_email, created_email],  # TO
+                emails,  # TO
                 fail_silently=False)
 
 
