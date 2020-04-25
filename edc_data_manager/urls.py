@@ -6,7 +6,7 @@ from .admin_site import edc_data_manager_admin
 from .views import HomeView, ListBoardView
 
 
-subject_identifier = '085\-[0-9\-]+'
+subject_identifier = '[0-9]{3}-[0-9\-]+'
 app_name = 'edc_data_manager'
 
 
