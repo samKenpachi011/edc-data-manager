@@ -13,10 +13,12 @@ def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
     if not raw:
         emails = []
         assigned_group = []
-        for key, value in django_apps.get_app_config('edc_data_manager').extra_assignee_choices.items():
-            if instance.assigned == key:
-                emails += value[1]
-                assigned_group += key
+        extra_assignee_choices = django_apps.get_app_config('edc_data_manager').extra_assignee_choices
+        if extra_assignee_choices:
+            for key, value in extra_assignee_choices.items():
+                if instance.assigned == key:
+                    emails += value[1]
+                    assigned_group += key
         if created:
             if assigned_group and emails:
                 subject = (

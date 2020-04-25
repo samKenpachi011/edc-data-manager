@@ -1,5 +1,6 @@
 from django.apps import apps as django_apps
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models
@@ -141,10 +142,15 @@ class DataActionItem(
         """
         assignable_users_choices = ()
         user = django_apps.get_model('auth.user')
+        try:
+            Group.objects.get(name='assignable users')
+        except Group.DoesNotExist:
+            Group.objects.create(name='assignable users')
         assignable_users = user.objects.filter(groups__name='assignable users')
         extra_choices = ()
-        for _, value in django_apps.get_app_config('edc_data_manager').extra_assignee_choices.items():
-            extra_choices += (value[0],)
+        if django_apps.get_app_config('edc_data_manager').extra_assignee_choices:
+            for _, value in django_apps.get_app_config('edc_data_manager').extra_assignee_choices.items():
+                extra_choices += (value[0],)
         for assignable_user in assignable_users:
             username = assignable_user.username
             if not assignable_user.first_name:
@@ -153,7 +159,8 @@ class DataActionItem(
                 raise ValidationError(f"The user {username} needs to set their last name.")
             full_name = f'{assignable_user.first_name} {assignable_user.last_name}'
             assignable_users_choices += ((username, full_name),)
-        assignable_users_choices += extra_choices
+        if extra_choices:
+            assignable_users_choices += extra_choices
         return assignable_users_choices
 
     def email_users(self, instance=None, subject=None, message=None, emails=None):
