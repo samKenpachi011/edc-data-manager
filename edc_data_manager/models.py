@@ -167,8 +167,8 @@ class DataActionItem(
         """Send an email to users who are related to the issue created.
         """
         user = django_apps.get_model('auth.user')
-        emails = emails or []
         if not emails:
+            emails = []
             try:
                 assugned_user = user.objects.get(username=instance.assigned)
             except user.DoesNotExist:
@@ -176,7 +176,7 @@ class DataActionItem(
                     f"The user {instance.assigned} that you have assigned the data issue {instance.issue_number}"
                     " does not exist.")
             else:
-                emails += assugned_user.email
+                emails.append(assugned_user.email)
             try:
                 created_user = user.objects.get(username=instance.user_created)
             except user.DoesNotExist:
@@ -184,7 +184,7 @@ class DataActionItem(
                     f"The user {instance.user_created} that created the data issue {instance.issue_number}"
                     " does not exist.")
             else:
-                emails += created_user.email
+                emails.append(created_user.email)
         
         if emails:
             send_mail(
