@@ -9,7 +9,7 @@ from ..model_wrappers import DataActionItemModelWrapper
 
 class DataActionItemsViewMixin(ContextMixin):
 
-    data_action_item_template = None
+    data_action_item_template = 'edc_data_manager/data_manager.html'
 
     @property
     def data_action_item(self):
