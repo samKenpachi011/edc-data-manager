@@ -11,7 +11,7 @@ Data manager classes
 
 To customise choices for assignees do the following:
 
-### `AppConfig` usage
+### `Usage` 
 	
 	from edc_data_manager.apps import AppConfig as BaseEdcDataManagerAppConfig
 
@@ -29,9 +29,15 @@ To customise choices for assignees do the following:
 	    identifier_pattern = '[0-9]{3}-[0-9]+'
 
 
-### `Groups`
-
-	Create a group with name: `assignable users` and add all the users who need to be in the choices for assignees.
-
-Advantages
+Groups
 ----------
+
+1. Create a group with name: `assignable users
+2. Add all the users who need to be in the choices for assignees.
+
+
+How it works
+----------
+
+Refer to the home page after installation for useage.
+
