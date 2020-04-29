@@ -25,8 +25,8 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
 
     model = 'edc_data_manager.dataactionitem'
     model_wrapper_cls = DataActionItemModelWrapper
-    navbar_name = 'data_manager'
-    navbar_selected_item = 'data_management'
+    navbar_name = 'edc_data_manager'
+    navbar_selected_item = 'data_manager'
     ordering = '-modified'
     paginate_by = 10
     search_form_url = 'data_manager_listboard_url'
