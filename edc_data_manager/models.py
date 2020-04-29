@@ -16,6 +16,13 @@ from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
 
 
+STATUS = (
+    (OPEN, 'Open'),
+    ('stalled', 'Stalled'),
+    ('resolved', 'Resolved'),
+    (CLOSED, 'Closed'))
+
+
 class SearchSlugModelMixin(Base):
 
     def get_search_slug_fields(self):
@@ -76,10 +83,10 @@ class ModelDiffMixin:
         return model_to_dict(self, fields=[field.name for field in
                              self._meta.fields])
 
-        
 
 class DataActionItem(
-        NonUniqueSubjectIdentifierFieldMixin, ModelDiffMixin, SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
+        NonUniqueSubjectIdentifierFieldMixin, ModelDiffMixin,
+        SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
     """ Tracks notes on missing or required data.
 
     Note can be displayed on the dashboard"""
@@ -90,8 +97,7 @@ class DataActionItem(
 
     action_date = models.DateField(
         verbose_name='Action date',
-        default=timezone.now
-        )
+        default=timezone.now)
 
     comment = EncryptedTextField(max_length=500)
 
@@ -113,9 +119,11 @@ class DataActionItem(
     status = models.CharField(
         verbose_name="Status",
         max_length=35,
-        choices=((OPEN, 'Open'), ('stalled', 'Stalled'), ('resolved', 'Resolved'), (CLOSED, 'Closed')),
+        choices=STATUS,
         default=OPEN,
-        help_text='Only data managers or study physicians can \'close\' an action item')
+        help_text=(
+            'Only data managers or study physicians '
+            'can \'close\' an action item'))
 
     objects = models.Manager()
 
@@ -135,35 +143,40 @@ class DataActionItem(
             else:
                 self.issue_number = 1
         super(DataActionItem, self).save(*args, **kwargs)
-    
+
     @property
     def assign_users(self):
         """Reurn a list of users that can be assigned an issue.
         """
         assignable_users_choices = ()
         user = django_apps.get_model('auth.user')
+        app_config = django_apps.get_app_config('edc_data_manager')
         try:
             Group.objects.get(name='assignable users')
         except Group.DoesNotExist:
             Group.objects.create(name='assignable users')
         assignable_users = user.objects.filter(groups__name='assignable users')
         extra_choices = ()
-        if django_apps.get_app_config('edc_data_manager').extra_assignee_choices:
-            for _, value in django_apps.get_app_config('edc_data_manager').extra_assignee_choices.items():
+        if app_config.extra_assignee_choices:
+            for _, value in app_config.extra_assignee_choices.items():
                 extra_choices += (value[0],)
         for assignable_user in assignable_users:
             username = assignable_user.username
             if not assignable_user.first_name:
-                raise ValidationError(f"The user {username} needs to set their first name.")
+                raise ValidationError(
+                    f"The user {username} needs to set their first name.")
             if not assignable_user.last_name:
-                raise ValidationError(f"The user {username} needs to set their last name.")
-            full_name = f'{assignable_user.first_name} {assignable_user.last_name}'
+                raise ValidationError(
+                    f"The user {username} needs to set their last name.")
+            full_name = (f'{assignable_user.first_name} '
+                         f'{assignable_user.last_name}')
             assignable_users_choices += ((username, full_name),)
         if extra_choices:
             assignable_users_choices += extra_choices
         return assignable_users_choices
 
-    def email_users(self, instance=None, subject=None, message=None, emails=None):
+    def email_users(self, instance=None,
+                    subject=None, message=None, emails=None):
         """Send an email to users who are related to the issue created.
         """
         user = django_apps.get_model('auth.user')
@@ -173,19 +186,19 @@ class DataActionItem(
                 assugned_user = user.objects.get(username=instance.assigned)
             except user.DoesNotExist:
                 raise ValidationError(
-                    f"The user {instance.assigned} that you have assigned the data issue {instance.issue_number}"
-                    " does not exist.")
+                    f"The user {instance.assigned} that you have assigned the "
+                    f"data issue {instance.issue_number} does not exist.")
             else:
                 emails.append(assugned_user.email)
             try:
                 created_user = user.objects.get(username=instance.user_created)
             except user.DoesNotExist:
                 raise ValidationError(
-                    f"The user {instance.user_created} that created the data issue {instance.issue_number}"
-                    " does not exist.")
+                    f"The user {instance.user_created} that created the data "
+                    f"issue {instance.issue_number} does not exist.")
             else:
                 emails.append(created_user.email)
-        
+
         if emails:
             send_mail(
                 subject,
@@ -193,7 +206,6 @@ class DataActionItem(
                 settings.EMAIL_HOST_USER,  # FROM
                 emails,  # TO
                 fail_silently=False)
-
 
     class Meta:
         app_label = "edc_data_manager"

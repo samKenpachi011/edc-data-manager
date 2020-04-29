@@ -22,7 +22,7 @@ class DataActionItemsViewMixin(ContextMixin):
         """Return a list of action items.
         """
         wrapped_data_action_items = []
-        status =[OPEN, 'stalled', 'resolved']
+        status = [OPEN, 'stalled', 'resolved']
         data_action_items = DataActionItem.objects.filter(
             subject_identifier=self.subject_identifier,
             status__in=status).order_by('issue_number')
@@ -32,15 +32,17 @@ class DataActionItemsViewMixin(ContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        status =[OPEN, 'stalled', 'resolved']
+
+        status = [OPEN, 'stalled', 'resolved']
         data_action_items = DataActionItem.objects.filter(
             subject_identifier=self.subject_identifier,
             status__in=status).order_by('issue_number')
         msg = ''
         for data_action_item in data_action_items:
-            msg = (f'Issue {data_action_item.issue_number}. Pending action created by'
-                   f' {data_action_item.user_created}. {data_action_item.subject} Assigned to {data_action_item.assigned}')
+            msg = (f'Issue {data_action_item.issue_number}. Pending action'
+                   f' created by {data_action_item.user_created}. '
+                   f'{data_action_item.subject} Assigned to '
+                   f'{data_action_item.assigned}')
             messages.add_message(
                 self.request, messages.ERROR, msg)
 
@@ -49,5 +51,3 @@ class DataActionItemsViewMixin(ContextMixin):
             data_action_item_add_url=self.data_action_item.href,
             data_action_items=self.data_action_items)
         return context
-
-    

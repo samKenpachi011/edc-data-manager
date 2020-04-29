@@ -5,7 +5,8 @@ from django.utils.decorators import method_decorator
 
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_constants.constants import CLOSED, OPEN
-from edc_dashboard.view_mixins import ListboardFilterViewMixin, SearchFormViewMixin
+from edc_dashboard.view_mixins import (
+    ListboardFilterViewMixin, SearchFormViewMixin)
 from edc_dashboard.views import ListboardView
 from edc_navbar import NavbarViewMixin
 
@@ -14,7 +15,8 @@ from ..models import DataActionItem
 
 
 class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
-                    ListboardFilterViewMixin, SearchFormViewMixin, ListboardView):
+                    ListboardFilterViewMixin, SearchFormViewMixin,
+                    ListboardView):
 
     listboard_template = 'data_manager_listboard_template'
     listboard_url = 'data_manager_listboard_url'

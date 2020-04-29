@@ -11,8 +11,8 @@ class DataActionItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DataActionItemForm, self).__init__(*args, **kwargs)
-        self.fields['assigned'].widget = forms.RadioSelect(choices=self.instance.assign_users)
-
+        self.fields['assigned'].widget = forms.RadioSelect(
+            choices=self.instance.assign_users)
 
     class Meta:
         model = DataActionItem

@@ -49,11 +49,14 @@ class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
     radio_fields = {
         "action_priority": admin.VERTICAL,
         "status": admin.VERTICAL}
-    
+
     readonly_fields = ('issue_number',)
 
-    list_display = ['created', 'subject_identifier', 'assigned', 'issue_number', 'status', 'user_created', 'user_modified', 'modified']
+    list_display = [
+        'created', 'subject_identifier', 'assigned', 'issue_number',
+        'status', 'user_created', 'user_modified', 'modified']
 
-    list_filter = ['status', 'created', 'user_created', 'modified', 'user_modified']
+    list_filter = [
+        'status', 'created', 'user_created', 'modified', 'user_modified']
 
     search_fields = ('subject_identifier',)
