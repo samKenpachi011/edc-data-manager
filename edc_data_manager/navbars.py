@@ -1,6 +1,6 @@
 from edc_navbar import NavbarItem, site_navbars, Navbar
 
-data_manager = Navbar(name='data_manager')
+data_manager = Navbar(name='edc_data_manager')
 
 data_manager.append_item(
     NavbarItem(name='edc_data_manager',
