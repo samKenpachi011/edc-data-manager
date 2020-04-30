@@ -24,4 +24,4 @@ data_manager_listboard_url_config = UrlConfig(
     identifier_pattern=app_config.identifier_pattern)
 
 urlpatterns += data_manager_listboard_url_config.listboard_urls
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
