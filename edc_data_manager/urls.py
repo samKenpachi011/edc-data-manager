@@ -1,6 +1,4 @@
 from django.apps import apps as django_apps
-from django.conf import settings
-from django.conf.urls.static import static
 from django.urls.conf import path
 
 from edc_dashboard import UrlConfig
@@ -24,4 +22,3 @@ data_manager_listboard_url_config = UrlConfig(
     identifier_pattern=app_config.identifier_pattern)
 
 urlpatterns += data_manager_listboard_url_config.listboard_urls
-
