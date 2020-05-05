@@ -6,15 +6,14 @@ from django.core.mail import send_mail
 from django.db import models
 from django.forms.models import model_to_dict
 from django.utils import timezone
-
 from django_crypto_fields.fields import EncryptedTextField
 from edc_base.model_mixins.base_uuid_model import BaseUuidModel
+from edc_base.model_validators import date_not_future
 from edc_base.sites import SiteModelMixin
 from edc_constants.constants import CLOSED, OPEN
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
-
 
 STATUS = (
     (OPEN, 'Open'),
@@ -97,7 +96,8 @@ class DataActionItem(
 
     action_date = models.DateField(
         verbose_name='Action date',
-        default=timezone.now)
+        default=timezone.now,
+        validators=[date_not_future, ],)
 
     comment = EncryptedTextField(max_length=500)
 
