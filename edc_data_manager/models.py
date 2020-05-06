@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.apps import apps as django_apps
 from django.conf import settings
 from django.contrib.auth.models import Group
@@ -96,8 +98,7 @@ class DataActionItem(
 
     action_date = models.DateField(
         verbose_name='Action date',
-        default=get_utcnow,
-        validators=[date_not_future, ],)
+        default=date.today,)
 
     comment = EncryptedTextField(max_length=500)
 
