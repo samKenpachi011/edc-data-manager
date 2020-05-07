@@ -34,9 +34,9 @@ def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
                 subject = (f"Issue number: {instance.issue_number}. "
                            f"{instance.subject} has been assigned to "
                            f"{instance.assigned} by {instance.user_created}")
-            message = f"{instance.comment}"
-            instance.email_users(
-                instance=instance, subject=subject, message=message)
+                message = f"{instance.comment}"
+                instance.email_users(
+                    instance=instance, subject=subject, message=message)
         else:
             change_message = ""
             subject = (
