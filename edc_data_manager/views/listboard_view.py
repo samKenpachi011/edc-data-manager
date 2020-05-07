@@ -12,11 +12,12 @@ from edc_navbar import NavbarViewMixin
 
 from ..model_wrappers import DataActionItemModelWrapper
 from ..models import DataActionItem
+from ..view_mixins import UserDetailsCheckViewMixin
 
 
 class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
-                    ListboardFilterViewMixin, SearchFormViewMixin,
-                    ListboardView):
+                    ListboardFilterViewMixin, UserDetailsCheckViewMixin,
+                    SearchFormViewMixin, ListboardView):
 
     listboard_template = 'data_manager_listboard_template'
     listboard_url = 'data_manager_listboard_url'

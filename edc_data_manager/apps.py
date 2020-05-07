@@ -12,6 +12,7 @@ class AppConfig(DjangoAppConfig):
     admin_site_name = 'edc_data_manager_admin'
     extra_assignee_choices = ()
     identifier_pattern = None
+    assignable_users_group = 'assignable users'
 
     def ready(self):
         from .signals import data_action_item_on_post_save

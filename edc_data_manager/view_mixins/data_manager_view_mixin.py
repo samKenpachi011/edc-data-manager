@@ -5,9 +5,10 @@ from edc_constants.constants import OPEN
 
 from ..models import DataActionItem
 from ..model_wrappers import DataActionItemModelWrapper
+from .user_details_check_view_mixin import UserDetailsCheckViewMixin
 
 
-class DataActionItemsViewMixin(ContextMixin):
+class DataActionItemsViewMixin(UserDetailsCheckViewMixin, ContextMixin):
 
     data_action_item_template = 'edc_data_manager/data_manager.html'
 

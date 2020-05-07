@@ -4,8 +4,12 @@ from django.contrib.auth.decorators import login_required
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_navbar import NavbarViewMixin
 
+from ..view_mixins import UserDetailsCheckViewMixin
 
-class HomeView(EdcBaseViewMixin, NavbarViewMixin, TemplateView):
+
+class HomeView(
+        EdcBaseViewMixin, UserDetailsCheckViewMixin,
+        NavbarViewMixin, TemplateView):
 
     template_name = 'edc_data_manager/home.html'
     navbar_name = 'edc_data_manager'

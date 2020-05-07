@@ -1,1 +1,2 @@
 from .data_manager_view_mixin import DataActionItemsViewMixin
+from .user_details_check_view_mixin import UserDetailsCheckViewMixin

@@ -9,9 +9,7 @@ from django.db import models
 from django.forms.models import model_to_dict
 from django_crypto_fields.fields import EncryptedTextField
 from edc_base.model_mixins.base_uuid_model import BaseUuidModel
-from edc_base.model_validators import date_not_future
 from edc_base.sites import SiteModelMixin
-from edc_base.utils import get_utcnow
 from edc_constants.constants import CLOSED, OPEN
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_search.model_mixins import SearchSlugManager
@@ -152,11 +150,12 @@ class DataActionItem(
         assignable_users_choices = ()
         user = django_apps.get_model('auth.user')
         app_config = django_apps.get_app_config('edc_data_manager')
+        assignable_users_group = app_config.assignable_users_group
         try:
-            Group.objects.get(name='assignable users')
+            Group.objects.get(name=assignable_users_group)
         except Group.DoesNotExist:
-            Group.objects.create(name='assignable users')
-        assignable_users = user.objects.filter(groups__name='assignable users')
+            Group.objects.create(name=assignable_users_group)
+        assignable_users = user.objects.filter(groups__name=assignable_users_group)
         extra_choices = ()
         if app_config.extra_assignee_choices:
             for _, value in app_config.extra_assignee_choices.items():
