@@ -1,7 +1,6 @@
 from django.contrib import admin
-
-from edc_base.sites.admin import ModelAdminSiteMixin
 from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
+from edc_base.sites.admin import ModelAdminSiteMixin
 from edc_model_admin import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
     ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
@@ -9,9 +8,9 @@ from edc_model_admin import (
     ModelAdminRedirectOnDeleteMixin)
 from edc_model_admin import audit_fieldset_tuple
 
+from .admin_site import edc_data_manager_admin
 from .forms import DataActionItemForm
 from .models import DataActionItem
-from .admin_site import edc_data_manager_admin
 
 
 class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,
@@ -50,7 +49,7 @@ class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
         "action_priority": admin.VERTICAL,
         "status": admin.VERTICAL}
 
-    readonly_fields = ('issue_number',)
+    readonly_fields = ('issue_number', 'action_date')
 
     list_display = [
         'created', 'subject_identifier', 'assigned', 'issue_number',
