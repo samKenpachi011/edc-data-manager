@@ -43,8 +43,8 @@ class UserDetailsCheckViewMixin(ContextMixin):
         if usernames:
             fix_usernames_msg += usernames
         else:
-            fix_email_msg = None
-        return fix_email_msg
+            fix_usernames_msg = None
+        return fix_usernames_msg
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
