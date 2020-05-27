@@ -1,0 +1,45 @@
+{% extends 'edc_data_manager/base.html' %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+
+{% endblock scripts %}
+
+
+{% block main %}
+
+<style></style>
+
+
+{{ block.super }}
+
+<div class="container bg-3 ">
+
+<h3>How to use data manager module.</h3>
+
+<p>Step 1:</p>
+
+<p>Get to a participant dashboard and create an action item.</p>
+<br>
+<img src="{% static 'edc_data_manager/img/step1.png' %}" alt="step 1" class="center-block"  width="1100" height="600" border="1">
+<br>
+<p>Step 2:</p>
+
+<p>Get to a participant dashboard and create an action item.</p>
+<br>
+<img src="{% static 'edc_data_manager/img/step2.png' %}" alt="step 2" class="center-block"  width="1100" height="600" border="1">
+<br>
+<p>Step 3:</p>
+<p>Action items will be displayed at the top of the dashboard until they get resolved and they will no longer show.</p>
+<br>
+<img src="{% static 'edc_data_manager/img/step3.png' %}" alt="step 3" class="center-block"  width="1100" height="600" border="1">
+<br>
+<p>Step 4:</p>
+<p>This is a list of all items that exists with some statistics by status. This also allows on to get to a participant dashboard or edit the action item.</p>
+<br>
+<img src="{% static 'edc_data_manager/img/step4.png' %}" alt="step 4" class="center-block"  width="1100" height="600" border="1">
+
+</div>
+
+{% endblock main %}

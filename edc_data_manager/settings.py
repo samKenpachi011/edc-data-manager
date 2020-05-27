@@ -12,10 +12,9 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from unipath import Path
 
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -28,46 +27,44 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+APP_NAME = 'edc_data_manager'
+
+ETC_DIR = '/etc/'
+
+SITE_ID = 1
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tastypie',
-    'edc_appointment',
-    'edc_appointment',
-    'edc_base',
-    'edc_configuration',
-    'edc_consent',
-    'edc_content_type_map',
-    'edc_crypto_fields',
-    'edc_data_manager',
-    'edc_export',
-    'edc_lab.lab_clinic_api',
-    'edc_meta_data',
-    'edc_quota',
-    'edc_registration',
-    'edc_sync',
-    'edc_testing',
-    'edc_visit_schedule',
-    'edc_visit_tracking',
-)
+    'django.contrib.sites',
+    'django_crypto_fields.apps.AppConfig',
+    'django_extensions',
+    'simple_history',
+    'edc_device.apps.AppConfig',
+    'edc_model_admin.apps.AppConfig',
+    'edc_base.apps.AppConfig',
+    'edc_identifier.apps.AppConfig',
+    'edc_data_manager.apps.AppConfig',
+]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django.middleware.security.SecurityMiddleware',
-)
+    'edc_dashboard.middleware.DashboardMiddleware',
+    'edc_subject_dashboard.middleware.DashboardMiddleware',
+]
 
 ROOT_URLCONF = 'edc_data_manager.urls'
 
@@ -89,7 +86,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'edc_data_manager.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -100,36 +96,42 @@ DATABASES = {
     }
 }
 
+# dashboards
+DASHBOARD_URL_NAMES = {
+    'data_manager_listboard_url': 'data_manager_listboard_url',
+}
+
+LAB_DASHBOARD_URL_NAMES = {}
+
+DASHBOARD_BASE_TEMPLATES = {
+    'listboard_base_template': 'edc_data_manager/base.html',
+    'data_manager_listboard_template': 'edc_data_manager/listboard.html',
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Gaborone'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
-
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
-
-GIT_DIR = BASE_DIR.ancestor(1)
+STATIC_ROOT = os.path.join(BASE_DIR, 'edc_data_manager', 'static')
 
 SITE_CODE = '10'
 DEVICE_ID = '10'
-SERVER_DEVICE_ID_LIST = [99]
-MIDDLEMAN_DEVICE_ID_LIST = []
-PROJECT_ROOT = BASE_DIR.ancestor(1)
-FIELD_MAX_LENGTH = 'default'
-IS_SECURE_DEVICE = True
-KEY_PATH = os.path.join(BASE_DIR.ancestor(1), 'crypto_fields')
-KEY_PREFIX = 'user'
-ALLOW_MODEL_SERIALIZATION = False
-DISPATCH_APP_LABELS = []
+
+GIT_DIR = BASE_DIR

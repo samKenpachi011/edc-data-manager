@@ -1,0 +1,62 @@
+{% extends "edc_dashboard/listboard.html" %}
+{% load admin_urls %}
+{% load edc_base_extras %}
+
+{% block extra-scripts %}
+{{ block.super }}
+
+<script type="text/javascript">
+</script>
+{% endblock extra-scripts %}
+             
+{% block listboard_panel %}
+    <a id="return_to_home" title="go back" class="btn btn-sm btn-default" role="button" 
+        href="/">
+            <i class="fa fa-arrow-left fa-sm"></i> Go Back
+    </a>
+	Open issues <span class="float-right badge badge-light round">{{open_action_items}}</span>
+	Stalled issues <span class="float-right badge badge-light round">{{stalled_action_items}}</span>
+	Resolved issues <span class="float-right badge badge-light round">{{resolved_action_items}}</span>
+	Closed issues <span class="float-right badge badge-light round">{{closed_action_items}}</span>
+{% endblock listboard_panel %}
+{% block listboard_table_button_column %}
+{% endblock listboard_table_button_column %}
+
+{% block listboard_table_header %}
+    <!-- begin results header -->
+    <th>#</th>
+    <th>Subject Identifier</th>
+    <th>Buttons</th>
+    <th>Status</th>
+    <th>Assigned</th>
+    <th>Action Priority</th>
+    <th>Ticket number</th>
+    <th>Subject</th>
+    <th>Actioned Date</th>
+    <th>User Created</th>
+    <!-- end results header -->
+{% endblock listboard_table_header %}
+
+
+{% block listboard_table_columns %}
+	<td>{{ result.subject_identifier }} </td>
+	<td style="white-space: nowrap">
+    <div class="btn-group">
+    <a title="Edit data action item" role="button" 
+       class="btn btn-default btn-sm"
+           href="{{ result.href }}">
+        <i class="fa fa-pencil-alt fa-sm"></i>
+    </a>
+      <a id="btn-subject-dashboard-{{result.subject_identifier}}" class="btn btn-primary btn-sm" role="button"   
+     title="Go to subject's dashboard" href="{% url subject_dashboard_url result.subject_identifier %}">
+     <i class="far fa-user-circle fa-sm"></i> Dashboard  <i class="fa fa-share"></i></a>
+    </div>
+	</td>
+	<td>{{ result.status }} </td>
+	<td>{{ result.assigned }} </td>
+	<td>{{ result.action_priority }} </td>
+	<td>{{result.issue_number}}</td>
+	<td>{{result.object.snippet}}</td>
+	<td>{{result.action_date}}</td>
+    <td nowrap>{{ result.user_created }}</td>
+{% endblock listboard_table_columns %}

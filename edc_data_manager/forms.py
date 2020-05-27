@@ -1,20 +1,19 @@
 from django import forms
-from django.contrib.auth.models import Group
-from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from .models import ActionItem
+from .models import DataActionItem
 
 
-class ActionItemForm(forms.ModelForm):
+class DataActionItemForm(forms.ModelForm):
 
-    action_group = forms.ChoiceField(
-        label='Action group',
-        choices=[
-            (item.get('name'), ' '.join(
-                item.get('name').split('_'))) for item in Group.objects.values('name').all()] + [
-                    ('no group', '<no group>')],
-        help_text='You can only select a group to which you belong. Choices are based on Groups defined in Auth.',
-        widget=AdminRadioSelect(renderer=AdminRadioFieldRenderer))
+    subject_identifier = forms.CharField(
+        label='Subject identifier',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
+    def __init__(self, *args, **kwargs):
+        super(DataActionItemForm, self).__init__(*args, **kwargs)
+        self.fields['assigned'].widget = forms.RadioSelect(
+            choices=self.instance.assign_users)
 
     class Meta:
-        model = ActionItem
+        model = DataActionItem
+        fields = '__all__'

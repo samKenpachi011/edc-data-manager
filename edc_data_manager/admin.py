@@ -1,57 +1,61 @@
 from django.contrib import admin
-from django.contrib.auth.models import Group
+from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
+from edc_base.sites.admin import ModelAdminSiteMixin
+from edc_model_admin import (
+    ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
+    ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
+    ModelAdminReadOnlyMixin, ModelAdminInstitutionMixin,
+    ModelAdminRedirectOnDeleteMixin)
+from edc_model_admin import audit_fieldset_tuple
 
-from edc_constants.constants import CLOSED, OPEN
-from edc_registration.models import RegisteredSubject
-
-from .forms import ActionItemForm
-from .models import ActionItem, Comment
-
-from .data_manager import data_manager
-
-
-class CommentAdmin(admin.ModelAdmin):
-        pass
-admin.site.register(Comment, CommentAdmin)
+from .admin_site import edc_data_manager_admin
+from .forms import DataActionItemForm
+from .models import DataActionItem
 
 
-class ActionItemAdmin(admin.ModelAdmin):
+class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,
+                      ModelAdminFormInstructionsMixin,
+                      ModelAdminFormAutoNumberMixin, ModelAdminRevisionMixin,
+                      ModelAdminAuditFieldsMixin, ModelAdminReadOnlyMixin,
+                      ModelAdminInstitutionMixin,
+                      ModelAdminRedirectOnDeleteMixin,
+                      ModelAdminSiteMixin):
 
-    form = ActionItemForm
+    list_per_page = 10
+    date_hierarchy = 'modified'
+    empty_value_display = '-'
 
-    fields = [
-        'registered_subject', 'subject', 'action_date', 'expiration_date', 'action_priority',
-        'status', 'comment', 'action_group', 'rt']
 
-    list_display = ['created', 'subject', 'dashboard', 'rt', 'status', 'user_created', 'user_modified', 'modified']
+@admin.register(DataActionItem, site=edc_data_manager_admin)
+class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
 
-    list_filter = ['status', 'action_group', 'created', 'user_created', 'modified', 'user_modified']
+    form = DataActionItemForm
 
-    search_fields = ('registered_subject__pk', 'registered_subject__subject_identifier')
+    fieldsets = (
+        (None, {
+            'fields': (
+                'subject_identifier',
+                'subject',
+                'assigned',
+                'status',
+                'action_priority',
+                'comment',
+                'issue_number',
+                'action_date',)}),
+        audit_fieldset_tuple
+    )
 
-    def save_model(self, request, obj, form, change):
-        # check for data_manager user groups
-        # group = data_manager.prepare()
-        data_manager.check_groups()
-        user = request.user
-        if not user.is_superuser:
-            # A user should be able to assign an action item to any other user group
-            user_groups = [group.name for group in Group.objects.all()]
-#             user_groups = [group.name for group in Group.objects.filter(user__username=request.user)]
-            if not user_groups:
-                obj.action_group = 'no group'
-            elif obj.action_group not in user_groups:
-                obj.action_group = user_groups[0]
-            else:
-                pass
-            if obj.status == CLOSED and ('data_manager' not in user_groups and 'action_manager' not in user_groups):
-                obj.status = OPEN
-        super(ActionItemAdmin, self).save_model(request, obj, form, change)
+    radio_fields = {
+        "action_priority": admin.VERTICAL,
+        "status": admin.VERTICAL}
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "registered_subject":
-            if request.GET.get('registered_subject'):
-                kwargs["queryset"] = RegisteredSubject.objects.filter(pk=request.GET.get('registered_subject'))
-        return super(ActionItemAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+    readonly_fields = ('issue_number', 'action_date')
 
-admin.site.register(ActionItem, ActionItemAdmin)
+    list_display = [
+        'created', 'subject_identifier', 'assigned', 'issue_number',
+        'status', 'user_created', 'user_modified', 'modified']
+
+    list_filter = [
+        'status', 'created', 'user_created', 'modified', 'user_modified']
+
+    search_fields = ('subject_identifier',)
