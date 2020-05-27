@@ -9,7 +9,7 @@ from .models import DataActionItem
           dispatch_uid='data_action_item_on_post_save')
 def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
     app_config = django_apps.get_app_config('edc_data_manager')
-    if not raw and app_config.assianable_suers_notofication:
+    if not raw and app_config.assianable_suers_note:
         emails = []
         assigned_group = []
         extra_assignee_choices = django_apps.get_app_config(
