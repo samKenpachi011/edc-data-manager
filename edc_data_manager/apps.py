@@ -13,6 +13,8 @@ class AppConfig(DjangoAppConfig):
     extra_assignee_choices = ()
     identifier_pattern = None
     assignable_users_group = 'assignable users'
+    assianable_suers_notofication = False
+    email_issue_notification = False
 
     def ready(self):
         from .signals import data_action_item_on_post_save

@@ -155,7 +155,8 @@ class DataActionItem(
             Group.objects.get(name=assignable_users_group)
         except Group.DoesNotExist:
             Group.objects.create(name=assignable_users_group)
-        assignable_users = user.objects.filter(groups__name=assignable_users_group)
+        assignable_users = user.objects.filter(
+            groups__name=assignable_users_group)
         extra_choices = ()
         if app_config.extra_assignee_choices:
             for _, value in app_config.extra_assignee_choices.items():

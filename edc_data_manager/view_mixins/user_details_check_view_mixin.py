@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.views.generic.base import ContextMixin
 
+app_config = django_apps.get_app_config('edc_data_manager')
+
 
 class UserDetailsCheckViewMixin(ContextMixin):
 
@@ -10,7 +12,6 @@ class UserDetailsCheckViewMixin(ContextMixin):
     def assignable_users(self):
         """Reurn users that belong to the action item assignable group.
         """
-        app_config = django_apps.get_app_config('edc_data_manager')
         assignable_users_group = app_config.assignable_users_group
         return User.objects.filter(
             groups__name=assignable_users_group)
@@ -48,18 +49,19 @@ class UserDetailsCheckViewMixin(ContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.fix_email_msg:
+        if self.fix_email_msg and app_config.email_issue_notification:
             messages.add_message(
                 self.request, messages.ERROR, self.fix_email_msg)
-        if self.fix_usernames_msg:
+        if self.fix_usernames_msg and app_config.assianable_suers_notofication:
             messages.add_message(
                 self.request, messages.ERROR, self.fix_usernames_msg)
-        if not self.assignable_users:
-            app_config = django_apps.get_app_config('edc_data_manager')
-            assignable_users_group = app_config.assignable_users_group
-            msg = (
-                'To assign users data action items add the to a group: '
-                f'{assignable_users_group}')
-            messages.add_message(
-                self.request, messages.ERROR, msg)
+        if app_config.assianable_suers_notofication:
+            if not self.assignable_users:
+                app_config = django_apps.get_app_config('edc_data_manager')
+                assignable_users_group = app_config.assignable_users_group
+                msg = (
+                    'To assign users data action items add the to a group: '
+                    f'{assignable_users_group}')
+                messages.add_message(
+                    self.request, messages.ERROR, msg)
         return context

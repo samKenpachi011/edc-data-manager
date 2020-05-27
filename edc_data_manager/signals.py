@@ -8,9 +8,8 @@ from .models import DataActionItem
 @receiver(post_save, weak=False, sender=DataActionItem,
           dispatch_uid='data_action_item_on_post_save')
 def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
-    """Creates a protocol response.
-    """
-    if not raw:
+    app_config = django_apps.get_app_config('edc_data_manager')
+    if not raw and app_config.assianable_suers_notofication:
         emails = []
         assigned_group = []
         extra_assignee_choices = django_apps.get_app_config(
