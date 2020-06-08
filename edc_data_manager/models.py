@@ -128,7 +128,8 @@ class DataActionItem(
 
     subject_type = models.CharField(
         max_length=10,
-        choices=SUBJECT_TYPES)
+        choices=SUBJECT_TYPES,
+        default='subject')
 
     objects = models.Manager()
 
