@@ -48,10 +48,10 @@
         <i class="fa fa-pencil-alt fa-sm"></i>
     </a>
       <a id="btn-subject-dashboard-{{result.subject_identifier}}" class="btn btn-primary btn-sm" role="button"   
-     title="Go to subject's dashboard" href="{% url subject_dashboard_url result.subject_identifier %}">
+     title="Go to subject's dashboard" href="{% url result.object.dashboard_url result.subject_identifier %}">
      <i class="far fa-user-circle fa-sm"></i> Dashboard  <i class="fa fa-share"></i></a>
     </div>
-	</td>
+      </td>
 	<td>{{ result.status }} </td>
 	<td>{{ result.assigned }} </td>
 	<td>{{ result.action_priority }} </td>
