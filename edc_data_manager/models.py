@@ -15,6 +15,8 @@ from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
 
+from .choices import SUBJECT_TYPES
+
 STATUS = (
     (OPEN, 'Open'),
     ('stalled', 'Stalled'),
@@ -124,6 +126,10 @@ class DataActionItem(
             'Only data managers or study physicians '
             'can \'close\' an action item'))
 
+    subject_type = models.CharField(
+        max_length=10,
+        choices=SUBJECT_TYPES)
+
     objects = models.Manager()
 
     @property
@@ -141,7 +147,23 @@ class DataActionItem(
                 self.issue_number = last_item_number + 1
             else:
                 self.issue_number = 1
+        if settings.APP_NAME == 'tshilo_dikotla':
+            identifier_type = self.subject_identifier.split('-')
+            if len(identifier_type) == 4:
+                self.subject_type = 'infant'
+            else:
+                self.subject_type = 'maternal'
+        else:
+            self.subject_type = 'subject'
         super(DataActionItem, self).save(*args, **kwargs)
+
+    @property
+    def dashboard_url(self):
+        if self.subject_type == 'infant':
+            return settings.DASHBOARD_URL_NAMES.get(
+                'infant_subject_dashboard_url')
+        return settings.DASHBOARD_URL_NAMES.get(
+            'subject_dashboard_url')
 
     @property
     def assign_users(self):
