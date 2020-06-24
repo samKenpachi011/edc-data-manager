@@ -1,14 +1,15 @@
 import re
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils.decorators import method_decorator
-
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_constants.constants import CLOSED, OPEN
+from edc_navbar import NavbarViewMixin
+
 from edc_dashboard.view_mixins import (
     ListboardFilterViewMixin, SearchFormViewMixin)
 from edc_dashboard.views import ListboardView
-from edc_navbar import NavbarViewMixin
 
 from ..model_wrappers import DataActionItemModelWrapper
 from ..models import DataActionItem
@@ -62,3 +63,19 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
         if re.match('^[A-Z]+$', search_term):
             q = Q(first_name__exact=search_term)
         return q
+
+    def get_wrapped_queryset(self, queryset):
+        """Returns a list of wrapped model instances.
+        """
+        object_list = []
+
+        for obj in queryset:
+            if obj.subject_type == 'infant':
+                next_url_name = settings.DASHBOARD_URL_NAMES.get(
+                    'infant_subject_dashboard_url')
+            else:
+                next_url_name = settings.DASHBOARD_URL_NAMES.get(
+                    'subject_dashboard_url')
+            object_list.append(self.model_wrapper_cls(obj,
+                                                      next_url_name=next_url_name))
+        return object_list
