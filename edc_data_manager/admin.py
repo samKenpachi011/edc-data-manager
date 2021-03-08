@@ -11,6 +11,7 @@ from edc_model_admin import audit_fieldset_tuple
 from .admin_site import edc_data_manager_admin
 from .forms import DataActionItemForm
 from .models import DataActionItem
+from .modeladmin_mixin import ExportActionMixin
 
 
 class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,
@@ -19,7 +20,8 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,
                       ModelAdminAuditFieldsMixin, ModelAdminReadOnlyMixin,
                       ModelAdminInstitutionMixin,
                       ModelAdminRedirectOnDeleteMixin,
-                      ModelAdminSiteMixin):
+                      ModelAdminSiteMixin,
+                      ExportActionMixin):
 
     list_per_page = 10
     date_hierarchy = 'modified'
