@@ -21,4 +21,10 @@ edc_data_manager.append_item(
             'data_manager_listboard_url'],
         no_url_namespace=no_url_namespace))
 
+edc_data_manager.append_item(
+    NavbarItem(name='data_manager_admin',
+               label='Data Manager Admin',
+               fa_icon='fa-cogs',
+               url_name='edc_data_manager:admin_url'))
+
 site_navbars.register(edc_data_manager)
