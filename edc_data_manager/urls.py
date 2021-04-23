@@ -1,5 +1,6 @@
 from django.apps import apps as django_apps
 from django.urls.conf import path
+from django.views.generic.base import RedirectView
 
 from edc_dashboard import UrlConfig
 
@@ -11,7 +12,8 @@ app_config = django_apps.get_app_config('edc_data_manager')
 
 urlpatterns = [
     path('admin/', edc_data_manager_admin.urls),
-    path('', HomeView.as_view(), name='home_url'),
+    path('home/', HomeView.as_view(), name='home_url'),
+    path('', RedirectView.as_view(url='admin/'), name='admin_url'),
 ]
 
 data_manager_listboard_url_config = UrlConfig(
