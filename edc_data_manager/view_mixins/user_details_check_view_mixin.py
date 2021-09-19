@@ -52,10 +52,10 @@ class UserDetailsCheckViewMixin(ContextMixin):
         if self.fix_email_msg and self.app_config.email_issue_notification:
             messages.add_message(
                 self.request, messages.ERROR, self.fix_email_msg)
-        if self.fix_usernames_msg and self.app_config.assianable_suers_note:
+        if self.fix_usernames_msg and self.app_config.assianable_users_note:
             messages.add_message(
                 self.request, messages.ERROR, self.fix_usernames_msg)
-        if self.app_config.assianable_suers_note:
+        if self.app_config.assianable_users_note:
             if not self.assignable_users:
                 app_config = django_apps.get_app_config('edc_data_manager')
                 assignable_users_group = app_config.assignable_users_group
