@@ -13,7 +13,7 @@ class AppConfig(DjangoAppConfig):
     extra_assignee_choices = ()
     identifier_pattern = None
     assignable_users_group = 'assignable users'
-    assianable_suers_note = False
+    assianable_users_note = False
     email_issue_notification = False
 
     def ready(self):
