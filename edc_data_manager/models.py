@@ -85,6 +85,21 @@ class ModelDiffMixin:
                              self._meta.fields])
 
 
+class QueryName(BaseUuidModel):
+    
+    query_name = models.CharField(
+        verbose_name="Name of the Query",
+        max_length=200,
+        unique=True,
+        null=False)
+    
+    def __str__(self):
+        return f'{self.query_name}'
+    
+    class Meta:
+        app_label = "edc_data_manager"
+
+
 class DataActionItem(
         NonUniqueSubjectIdentifierFieldMixin, ModelDiffMixin,
         SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
@@ -95,6 +110,16 @@ class DataActionItem(
     subject = models.CharField(
         verbose_name="Issue Subject",
         max_length=100,)
+
+    query_name = models.CharField(
+        verbose_name="Name of the Query",
+        max_length=200,)
+    
+    new_query_name = models.CharField(
+        verbose_name="New Query Name",
+        max_length=200,
+        blank=True,
+        null=True,)
 
     action_date = models.DateField(
         verbose_name='Action date',
@@ -156,6 +181,10 @@ class DataActionItem(
                 self.subject_type = 'maternal'
         else:
             self.subject_type = 'subject'
+        if self.new_query_name:
+            query_name = QueryName.objects.create(query_name=self.new_query_name)
+            self.query_name = query_name.query_name
+            self.new_query_name = None
         super(DataActionItem, self).save(*args, **kwargs)
 
     @property
@@ -165,6 +194,19 @@ class DataActionItem(
                 'infant_subject_dashboard_url')
         return settings.DASHBOARD_URL_NAMES.get(
             'subject_dashboard_url')
+
+    @property
+    def query_names(self):
+        """Return choices of query_name.
+        """
+        choices_options = ()
+        query_name_cls = django_apps.get_model('edc_data_manager.queryname')
+        query_names = query_name_cls.objects.all()
+        if not query_names:
+            query_name_cls.objects.create(query_name='Not Categorized')
+        for query_name in query_names:
+            choices_options += ((query_name, query_name),)
+        return choices_options
 
     @property
     def assign_users(self):

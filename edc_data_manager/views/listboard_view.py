@@ -3,6 +3,9 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils.decorators import method_decorator
+
+from django_pandas.io import read_frame
+
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_constants.constants import CLOSED, OPEN
 from edc_navbar import NavbarViewMixin
@@ -36,6 +39,26 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
+    
+    @property
+    def query_summary(self):
+        """Return a summary of quesries
+        """
+        data = []
+        qs_categories = DataActionItem.objects.all().values_list('query_name', flat=True)
+        qs_categories = list(set(qs_categories))
+        for query_name in qs_categories:
+            qs_gabs = DataActionItem.objects.filter(site__id=40, query_name=query_name)
+            qs_maun = DataActionItem.objects.filter(site__id=41, query_name=query_name)
+            qs_serowe = DataActionItem.objects.filter(site__id=42, query_name=query_name)
+            qs_gheto = DataActionItem.objects.filter(site__id=43, query_name=query_name)
+            qs_sphikwe = DataActionItem.objects.filter(site__id=44, query_name=query_name)
+            qs = DataActionItem.objects.filter(query_name=query_name)
+            data.append([
+                query_name, qs_gabs.count(), qs_maun.count(),
+                qs_serowe.count(), qs_gheto.count(), qs_sphikwe.count(),
+                qs.count()])
+        return data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -44,6 +67,7 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
         resolved_action_items = DataActionItem.objects.filter(status='resolved')
         closed_action_items = DataActionItem.objects.filter(status=CLOSED)
         context.update(
+            query_summary=self.query_summary,
             export_add_url=self.model_cls().get_absolute_url(),
             open_action_items=open_action_items.count(),
             stalled_action_items=stalled_action_items.count(),

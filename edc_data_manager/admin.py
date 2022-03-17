@@ -9,8 +9,8 @@ from edc_model_admin import (
 from edc_model_admin import audit_fieldset_tuple
 
 from .admin_site import edc_data_manager_admin
-from .forms import DataActionItemForm
-from .models import DataActionItem
+from .forms import DataActionItemForm, QueryNameForm
+from .models import DataActionItem, QueryName
 from .modeladmin_mixin import ExportActionMixin
 
 
@@ -38,6 +38,8 @@ class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
             'fields': (
                 'subject_identifier',
                 'subject',
+                'query_name',
+                'new_query_name',
                 'assigned',
                 'status',
                 'action_priority',
@@ -61,3 +63,22 @@ class DataActionItemAdmin(ModelAdminMixin, admin.ModelAdmin):
         'status', 'created', 'user_created', 'modified', 'user_modified']
 
     search_fields = ('subject_identifier',)
+
+
+
+@admin.register(QueryName, site=edc_data_manager_admin)
+class QueryNameAdmin(ModelAdminMixin, admin.ModelAdmin):
+
+    form = QueryNameForm
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'query_name',)}),
+        audit_fieldset_tuple
+    )
+
+    list_display = [
+        'created', 'query_name', 'user_created', 'user_modified', 'modified']
+
+    search_fields = ('query_name',)
