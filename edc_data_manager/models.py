@@ -173,17 +173,16 @@ class DataActionItem(
                 self.issue_number = last_item_number + 1
             else:
                 self.issue_number = 1
-        if settings.APP_NAME == 'tshilo_dikotla':
-            identifier_type = self.subject_identifier.split('-')
-            if len(identifier_type) == 4:
-                self.subject_type = 'infant'
-            else:
-                self.subject_type = 'maternal'
-        else:
-            self.subject_type = 'subject'
+        self.subject_type = 'subject'
         if self.new_query_name:
-            query_name = QueryName.objects.create(query_name=self.new_query_name)
-            self.query_name = query_name.query_name
+            query = None
+            try:
+                QueryName.objects.get(query_name=self.new_query_name)
+            except QueryName.DoesNotExist:
+                query = QueryName.objects.create(query_name=self.new_query_name)
+            else:
+                raise ValidationError("The query summary alreadyexists")
+            self.query_name = query.query_name
             self.new_query_name = None
         super(DataActionItem, self).save(*args, **kwargs)
 
@@ -275,3 +274,4 @@ class DataActionItem(
 
     class Meta:
         app_label = "edc_data_manager"
+        unique_together = ('subject_identifier', 'query_name',)

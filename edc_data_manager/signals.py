@@ -9,6 +9,7 @@ from .models import DataActionItem
           dispatch_uid='data_action_item_on_post_save')
 def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
     app_config = django_apps.get_app_config('edc_data_manager')
+    email_issue_notification = app_config.email_issue_notification
     if not raw and app_config.assianable_users_note:
         emails = []
         extra_assignee_choices = django_apps.get_app_config(
@@ -50,7 +51,7 @@ def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
                     count += 1
                     change_message += msg
                 message = f"{change_message} \r\n \r\n \r\n {instance.comment}"
-                if emails:
+                if emails and email_issue_notification:
                     instance.email_users(
                         instance=instance, subject=subject,
                         message=message, emails=emails)
