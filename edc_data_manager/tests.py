@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-
+from edc_sync.tests import SyncTestHelper
 from .models import DataActionItem
+from django.test import TestCase, tag
 
 
+@tag('et')
 class TestDataActionItem(TestCase):
+    sync_test_helper = SyncTestHelper()
 
     def setUp(self):
         self.assigned_user = User.objects.create_user(
@@ -62,3 +65,9 @@ class TestDataActionItem(TestCase):
         self.assertEqual(
             error.exception.message,
             'The user  that created the data issue 1 does not exist.')
+
+    def test_natural_key_attrs(self):
+        self.sync_test_helper.sync_test_natural_key_attr('edc_data_manager')
+
+    def test_get_by_natural_key_attr(self):
+        self.sync_test_helper.sync_test_get_by_natural_key_attr('edc_data_manager')
