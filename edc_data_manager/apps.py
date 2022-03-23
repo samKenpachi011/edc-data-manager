@@ -10,7 +10,6 @@ class AppConfig(DjangoAppConfig):
     name = 'edc_data_manager'
     verbose_name = "EDC Data Manager"
     admin_site_name = 'edc_data_manager_admin'
-    # extra_assignee_choices = ()
     identifier_pattern = None
     assignable_users_group = 'assignable users'
     assianable_users_note = False
