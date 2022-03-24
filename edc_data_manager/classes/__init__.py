@@ -1,1 +1,1 @@
-from .query_generation.py import QueryGeneration
+from .query_generation import QueryGeneration

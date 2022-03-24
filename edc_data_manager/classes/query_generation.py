@@ -73,25 +73,25 @@ class QueryGeneration:
         """
         crfmetadata = django_apps.get_model('edc_metadata.crfmetadata')
         query = self.create_query_name(
-            query_name='Missing Visit Forms data
+            query_name='Missing Visit Forms data')
         
         maternal_identifier = self.maternal_delivery_model_cls.objects.all().values_list(
             'subject_identifier', flat=True)
         antenatal_identifiers = self.antenatal_enrollment_model_cls.objects.all().values_list(
             'subject_identifier', flat=True)
-        enrolled_identifiers = list(set(antenatal_identifiers) + set(maternal_identifier))
+        enrolled_identifiers = list(set(antenatal_identifiers)) + list(set(maternal_identifier))
+        
         required_crfs = crfmetadata.objects.filter(
             subject_identifier__in=enrolled_identifiers, entry_status='REQUIRED')
         data = [(qs.subject_identifier, qs.schedule_name, qs.visit_code,
                  qs.visit_code_sequence, qs.verbose_name) for qs in required_crfs if self.check_appt_status(qs)]
         for missing_crf in required_crfs:
-            assign = self.site_issue_assign_opts.get(missing_crf.site.id)
+            assign = 'clinic'
             model = missing_crf.model
             model = model.split('.')[1]
             subject = f"Participant is missing {model} data for visit {missing_crf.visit_code}."
             comment = subject + " Please complete the missing data for the form"
             self.create_action_item(
-                site=missing_crf.site,
                 subject_identifier=missing_crf.subject_identifier,
                 query_name=query.query_name,
                 assign=assign,
