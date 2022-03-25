@@ -14,6 +14,9 @@ from edc_constants.constants import CLOSED, OPEN
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
+from edc_base.model_managers import HistoricalRecords
+
+
 
 from .choices import SUBJECT_TYPES
 
@@ -39,6 +42,12 @@ class DataActionItemManager(SearchSlugManager, models.Manager):
 
     def get_by_natural_key(self, subject_identifier):
         return self.get(subject_identifier=subject_identifier)
+    
+    
+class QueryNameManager(SearchSlugManager, models.Manager):
+
+    def get_by_natural_key(self, query_name):
+        return self.get(query_name=query_name)    
 
 
 class ModelDiffMixin:
@@ -92,6 +101,13 @@ class QueryName(BaseUuidModel):
         max_length=200,
         unique=True,
         null=False)
+
+    objects = QueryNameManager()
+    
+    history = HistoricalRecords()
+    
+    def natural_key(self):
+        return (self.query_name,)
     
     def __str__(self):
         return f'{self.query_name}'
@@ -156,7 +172,12 @@ class DataActionItem(
         choices=SUBJECT_TYPES,
         default='subject')
 
-    objects = models.Manager()
+    objects = DataActionItemManager()
+    
+    history = HistoricalRecords()
+    
+    def natural_key(self):
+        return (self.subject_identifier,)
 
     @property
     def snippet(self):

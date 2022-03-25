@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,12 +46,15 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django_crypto_fields.apps.AppConfig',
     'django_extensions',
+    'rest_framework.authtoken',
     'simple_history',
     'edc_device.apps.AppConfig',
     'edc_model_admin.apps.AppConfig',
     'edc_base.apps.AppConfig',
     'edc_identifier.apps.AppConfig',
     'edc_data_manager.apps.AppConfig',
+    'edc_sync.apps.AppConfig',
+    'edc_sync_files.apps.AppConfig',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +139,23 @@ SITE_CODE = '10'
 DEVICE_ID = '10'
 
 GIT_DIR = BASE_DIR
+
+# sync configs
+EDC_SYNC_SERVER_IP = None
+EDC_SYNC_FILES_USER = None
+EDC_SYNC_FILES_REMOTE_HOST = None
+EDC_SYNC_FILES_USB_VOLUME = None
+
+if 'test' in sys.argv:
+
+    class DisableMigrations:
+
+        def __contains__(self, item):
+            return True
+
+        def __getitem__(self, item):
+            return None
+
+    MIGRATION_MODULES = DisableMigrations()
+    PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
+    DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
