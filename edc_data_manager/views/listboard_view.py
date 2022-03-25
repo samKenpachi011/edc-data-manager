@@ -13,10 +13,11 @@ from edc_navbar import NavbarViewMixin
 from edc_dashboard.view_mixins import (
     ListboardFilterViewMixin, SearchFormViewMixin)
 from edc_dashboard.views import ListboardView
+from edc_dashboard.listboard_filter import ListboardFilter
 
 from ..model_wrappers import DataActionItemModelWrapper
-from ..models import DataActionItem
-from ..view_mixins import UserDetailsCheckViewMixin
+from ..models import DataActionItem, QueryName
+from ..view_mixins import ListboardViewFilters, UserDetailsCheckViewMixin
 
 
 class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
@@ -28,6 +29,7 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
     listboard_panel_style = 'info'
     listboard_fa_icon = "fa-user-plus"
 
+    listboard_view_filters = ListboardViewFilters()
     model = 'edc_data_manager.dataactionitem'
     model_wrapper_cls = DataActionItemModelWrapper
     navbar_name = 'edc_data_manager'
@@ -39,7 +41,7 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
-    
+
     @property
     def query_summary(self):
         """Return a summary of quesries
@@ -66,6 +68,7 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
         stalled_action_items = DataActionItem.objects.filter(status='stalled')
         resolved_action_items = DataActionItem.objects.filter(status='resolved')
         closed_action_items = DataActionItem.objects.filter(status=CLOSED)
+        
         context.update(
             query_summary=self.query_summary,
             export_add_url=self.model_cls().get_absolute_url(),
