@@ -150,7 +150,7 @@ class DataActionItem(
                 self.issue_number = last_item_number + 1
             else:
                 self.issue_number = 1
-        if settings.APP_NAME == 'tshilo_dikotla':
+        if app_config.child_subject:
             identifier_type = self.subject_identifier.split('-')
             if len(identifier_type) == 4:
                 self.subject_type = 'infant'
