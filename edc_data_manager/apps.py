@@ -15,6 +15,7 @@ class AppConfig(DjangoAppConfig):
     assignable_users_group = 'assignable users'
     assianable_users_note = False
     email_issue_notification = False
+    child_subject = False
 
     def ready(self):
         from .signals import data_action_item_on_post_save
