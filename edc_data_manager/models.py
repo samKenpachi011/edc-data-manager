@@ -16,8 +16,6 @@ from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
 from edc_base.model_managers import HistoricalRecords
 
-
-
 from .choices import SUBJECT_TYPES
 
 STATUS = (
@@ -40,14 +38,14 @@ class SearchSlugModelMixin(Base):
 
 class DataActionItemManager(SearchSlugManager, models.Manager):
 
-    def get_by_natural_key(self, subject_identifier):
-        return self.get(subject_identifier=subject_identifier)
-    
-    
+    def get_by_natural_key(self, subject_identifier, query_name):
+        return self.get(subject_identifier=subject_identifier, query_name=query_name)
+
+
 class QueryNameManager(SearchSlugManager, models.Manager):
 
     def get_by_natural_key(self, query_name):
-        return self.get(query_name=query_name)    
+        return self.get(query_name=query_name)
 
 
 class ModelDiffMixin:
@@ -95,7 +93,7 @@ class ModelDiffMixin:
 
 
 class QueryName(BaseUuidModel):
-    
+
     query_name = models.CharField(
         verbose_name="Name of the Query",
         max_length=200,
@@ -103,15 +101,15 @@ class QueryName(BaseUuidModel):
         null=False)
 
     objects = QueryNameManager()
-    
+
     history = HistoricalRecords()
-    
+
     def natural_key(self):
         return (self.query_name,)
-    
+
     def __str__(self):
         return f'{self.query_name}'
-    
+
     class Meta:
         app_label = "edc_data_manager"
 
@@ -130,7 +128,7 @@ class DataActionItem(
     query_name = models.CharField(
         verbose_name="Name of the Query",
         max_length=200,)
-    
+
     new_query_name = models.CharField(
         verbose_name="New Query Name",
         max_length=200,
@@ -173,11 +171,11 @@ class DataActionItem(
         default='subject')
 
     objects = DataActionItemManager()
-    
+
     history = HistoricalRecords()
-    
+
     def natural_key(self):
-        return (self.subject_identifier,)
+        return (self.subject_identifier, self.query_name, )
 
     @property
     def snippet(self):
@@ -202,10 +200,10 @@ class DataActionItem(
             except QueryName.DoesNotExist:
                 query = QueryName.objects.create(query_name=self.new_query_name)
             else:
-                raise ValidationError("The query summary alreadyexists")
+                raise ValidationError("The query summary already exists")
             self.query_name = query.query_name
             self.new_query_name = None
-        super(DataActionItem, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     @property
     def dashboard_url(self):
@@ -294,5 +292,5 @@ class DataActionItem(
                 fail_silently=False)
 
     class Meta:
-        app_label = "edc_data_manager"
+        app_label = 'edc_data_manager'
         unique_together = ('subject_identifier', 'query_name',)

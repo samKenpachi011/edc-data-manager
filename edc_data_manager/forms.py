@@ -16,22 +16,23 @@ class DataActionItemForm(forms.ModelForm):
             choices=self.instance.assign_users)
         self.fields['query_name'].widget = forms.RadioSelect(
             choices=self.instance.query_names)
-    
+
     def clean(self):
         cleaned_data = super().clean()
-        query_name = cleaned_data.get("query_name")
-        new_query_name = cleaned_data.get("new_query_name")
+        query_name = cleaned_data.get('query_name')
+        new_query_name = cleaned_data.get('new_query_name')
 
         if not query_name == 'Not Categorized' and new_query_name:
             raise ValidationError(
-                    "If the query name is categorized new query name is not required."
+                    'If the query name is categorized new query name is not required.'
                 )
         if query_name == 'Not Categorized' and not new_query_name:
-            raise ValidationError("Please provide new query name category.")
+            raise ValidationError('Please provide new query name category.')
 
     class Meta:
         model = DataActionItem
         fields = '__all__'
+
 
 class QueryNameForm(forms.ModelForm):
 
