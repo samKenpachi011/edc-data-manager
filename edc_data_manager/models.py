@@ -17,6 +17,8 @@ from edc_search.model_mixins import SearchSlugModelMixin as Base
 
 from .choices import SUBJECT_TYPES
 
+app_config = django_apps.get_app_config('edc_data_manager')
+
 STATUS = (
     (OPEN, 'Open'),
     ('stalled', 'Stalled'),
@@ -148,7 +150,7 @@ class DataActionItem(
                 self.issue_number = last_item_number + 1
             else:
                 self.issue_number = 1
-        if settings.APP_NAME == 'tshilo_dikotla':
+        if app_config.child_subject:
             identifier_type = self.subject_identifier.split('-')
             if len(identifier_type) == 4:
                 self.subject_type = 'infant'

@@ -76,9 +76,12 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
             if obj.subject_type == 'infant':
                 next_url_name = settings.DASHBOARD_URL_NAMES.get(
                     'infant_subject_dashboard_url')
+                if not next_url_name:
+                    next_url_name = settings.DASHBOARD_URL_NAMES.get(
+                        'child_dashboard_url')
             else:
-                next_url_name = settings.DASHBOARD_URL_NAMES.get(
-                    'subject_dashboard_url')
+                next_url_name = settings.DASHBOARD_URL_NAMES.get('subject_dashboard_url')
+
             object_list.append(self.model_wrapper_cls(obj,
                                                       next_url_name=next_url_name))
         return object_list

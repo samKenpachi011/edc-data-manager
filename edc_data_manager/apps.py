@@ -20,6 +20,7 @@ class AppConfig(DjangoAppConfig):
     # Dashboard urls
     infant_dashboard_url = None
     subject_dashboard_url = None
+    child_subject = False
 
     def ready(self):
         from .signals import data_action_item_on_post_save
