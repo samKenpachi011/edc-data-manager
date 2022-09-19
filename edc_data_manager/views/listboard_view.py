@@ -16,11 +16,13 @@ from edc_dashboard.views import ListboardView
 
 from ..model_wrappers import DataActionItemModelWrapper
 from ..models import DataActionItem
-from ..view_mixins import UserDetailsCheckViewMixin
+from ..view_mixins import (
+    UserDetailsCheckViewMixin, DataIssueListboardViewFilters)
 
 
 class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
                     ListboardFilterViewMixin, UserDetailsCheckViewMixin,
+                    DataIssueListboardViewFilters,
                     SearchFormViewMixin, ListboardView):
 
     listboard_template = 'data_manager_listboard_template'
@@ -30,6 +32,7 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
 
     model = 'edc_data_manager.dataactionitem'
     model_wrapper_cls = DataActionItemModelWrapper
+    listboard_view_filters = DataIssueListboardViewFilters()
     navbar_name = 'edc_data_manager'
     navbar_selected_item = 'data_manager'
     ordering = '-modified'
@@ -89,9 +92,12 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
             if obj.subject_type == 'infant':
                 next_url_name = settings.DASHBOARD_URL_NAMES.get(
                     'infant_subject_dashboard_url')
+                if not next_url_name:
+                    next_url_name = settings.DASHBOARD_URL_NAMES.get(
+                        'child_dashboard_url')
             else:
-                next_url_name = settings.DASHBOARD_URL_NAMES.get(
-                    'subject_dashboard_url')
+                next_url_name = settings.DASHBOARD_URL_NAMES.get('subject_dashboard_url')
+
             object_list.append(self.model_wrapper_cls(obj,
                                                       next_url_name=next_url_name))
         return object_list

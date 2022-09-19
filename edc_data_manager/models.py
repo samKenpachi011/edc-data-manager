@@ -17,6 +17,8 @@ from edc_search.model_mixins import SearchSlugModelMixin as Base
 
 from .choices import SUBJECT_TYPES
 
+app_config = django_apps.get_app_config('edc_data_manager')
+
 STATUS = (
     (OPEN, 'Open'),
     ('stalled', 'Stalled'),
@@ -173,13 +175,10 @@ class DataActionItem(
                 self.issue_number = last_item_number + 1
             else:
                 self.issue_number = 1
-        self.subject_type = 'subject'
-        if self.new_query_name:
-            query = None
-            try:
-                QueryName.objects.get(query_name=self.new_query_name)
-            except QueryName.DoesNotExist:
-                query = QueryName.objects.create(query_name=self.new_query_name)
+        if app_config.child_subject:
+            identifier_type = self.subject_identifier.split('-')
+            if len(identifier_type) == 4:
+                self.subject_type = 'infant'
             else:
                 raise ValidationError("The query summary alreadyexists")
             self.query_name = query.query_name
@@ -188,11 +187,12 @@ class DataActionItem(
 
     @property
     def dashboard_url(self):
+        app_config = django_apps.get_app_config('edc_data_manager')
         if self.subject_type == 'infant':
             return settings.DASHBOARD_URL_NAMES.get(
-                'infant_subject_dashboard_url')
+                app_config.infant_dashboard_url)
         return settings.DASHBOARD_URL_NAMES.get(
-            'subject_dashboard_url')
+            app_config.subject_dashboard_url)
 
     @property
     def query_names(self):

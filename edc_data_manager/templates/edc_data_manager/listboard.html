@@ -65,8 +65,8 @@
     <th>Action Priority</th>
     <th>Ticket number</th>
     <th>Subject</th>
-    <th>Issue age (days)</th>
-    <th>Created date</th>
+    <th>Ticket Age (days)</th>
+    <th>Created Date</th>
     <!-- end results header -->
 {% endblock listboard_table_header %}
 
@@ -90,6 +90,6 @@
 	<td>{{ result.action_priority }} </td>
 	<td>{{result.issue_number}}</td>
 	<td>{{result.object.snippet}}</td>
-	<td>{{result.issue_age}}</td>
-    <td nowrap>{{ result.date_created  }}</td>
+	<td>{{result.age}}</td>
+    <td nowrap>{{ result.action_date }}</td>
 {% endblock listboard_table_columns %}
