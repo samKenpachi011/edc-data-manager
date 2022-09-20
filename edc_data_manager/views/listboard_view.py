@@ -14,6 +14,7 @@ from edc_dashboard.view_mixins import (
     ListboardFilterViewMixin, SearchFormViewMixin)
 from edc_dashboard.views import ListboardView
 from edc_dashboard.listboard_filter import ListboardFilter
+from requests import delete
 
 from ..model_wrappers import DataActionItemModelWrapper
 from ..models import DataActionItem, QueryName
@@ -83,8 +84,11 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
         if kwargs.get('subject_identifier'):
             options.update(
                 {'subject_identifier': kwargs.get('subject_identifier')})
+            
+        del options['site']
+        
         return options
-
+    
     def extra_search_options(self, search_term):
         q = Q()
         if re.match('^[A-Z]+$', search_term):
