@@ -57,10 +57,10 @@
         href="/">
             <i class="fa fa-arrow-left fa-sm"></i> Go Back
     </a> 
-	<span style='margin-left: 3%'><a href="{% if request.GET.f and request.GET.status is None or request.GET.status != 'open' %} {{ request.get_full_path }}&status=open {% else %} ?status=open {% endif %}">Open issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{open_action_items}}</span></span>
-	<a href="{% if request.GET.f and request.GET.status is None or request.GET.status != 'stalled' %} {{ request.get_full_path }}&status=stalled {% else %} ?status=stalled  {% endif %}">Stalled issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{stalled_action_items}}</span>
-	<a href="{% if request.GET.f and request.GET.status is None or request.GET.status != 'resolved' %} {{ request.get_full_path }}&status=resolved  {% else %} ?status=resolved {% endif %}">Resolved issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{resolved_action_items}}</span>
-	<a href="{% if request.GET.f and request.GET.status is None or request.GET.status != 'closed'%} {{ request.get_full_path }}&status=closed {% else %} ?status=closed  {% endif %}">Closed issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{closed_action_items}}</span>
+	<span style='margin-left: 3%'><a href="{% if request.GET.f and request.GET.status is None %} {{ request.get_full_path }}&status=open {% else %} ?status=open {% endif %}">Open issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{open_action_items}}</span></span>
+	<a href="{% if request.GET.f and request.GET.status is None  %} {{ request.get_full_path }}&status=stalled {% else %} ?status=stalled  {% endif %}">Stalled issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{stalled_action_items}}</span>
+	<a href="{% if request.GET.f and request.GET.status is None %} {{ request.get_full_path }}&status=resolved  {% else %} ?status=resolved {% endif %}">Resolved issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{resolved_action_items}}</span>
+	<a href="{% if request.GET.f and request.GET.status is None %} {{ request.get_full_path }}&status=closed {% else %} ?status=closed  {% endif %}">Closed issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{closed_action_items}}</span>
 
 	<br>
 
@@ -70,7 +70,7 @@
 		</span>
 		{% for query_name in query_names %}
 			<span style="margin-right: 1%; margin-buttom: 3px;">
-				<a href="{% if request.GET.f and request.GET.query_name is None or request.GET.query_name != query_name %} {{ request.get_full_path }}&query_name={{query_name}} {% else %} ?query_name={{query_name}} {% endif %}"> {{ query_name }}</a>
+				<a href="{% if request.GET.f and request.GET.query_name is None %} {{ request.get_full_path }}&query_name={{query_name}} {% else %} ?query_name={{query_name}} {% endif %}"> {{ query_name }}</a>
 			</span>
 		{% endfor %}
 	</div>
