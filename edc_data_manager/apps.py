@@ -18,8 +18,8 @@ class AppConfig(DjangoAppConfig):
     email_issue_notification = False
     
     # Dashboard urls
-    infant_dashboard_url = None
-    subject_dashboard_url = None
+    infant_dashboard_url = 'child_dashboard_url'
+    subject_dashboard_url = 'subject_dashboard_url'
     child_subject = False
 
     def ready(self):
