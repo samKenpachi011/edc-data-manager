@@ -81,11 +81,19 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
 
     def get_queryset_filter_options(self, request, *args, **kwargs):
         options = super().get_queryset_filter_options(request, *args, **kwargs)
-        if kwargs.get('subject_identifier'):
+        
+        del options['site'] # 
+        
+        if kwargs.get('subject_identifier', None):
             options.update(
                 {'subject_identifier': kwargs.get('subject_identifier')})
             
-        del options['site']
+            
+        status = request.GET.get('status', None)
+            
+        if status:
+            options.update(
+                {'status': status})
         
         return options
     
