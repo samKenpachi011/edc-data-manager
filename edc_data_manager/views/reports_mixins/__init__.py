@@ -1,0 +1,1 @@
+from .resolved_daily_mixin import ResolvedDailyMixin
