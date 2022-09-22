@@ -70,8 +70,8 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
         closed_action_items = DataActionItem.objects.filter(status=CLOSED)
         
         context.update(
-            resolved_last_week=self.resolved_last_week.items(),
-            closed_last_week=self.closed_last_week.items(),
+            resolved_last_week=self.resolved_last_week,
+            closed_last_week=self.closed_last_week,
             query_summary=self.query_summary,
             export_add_url=self.model_cls().get_absolute_url(),
             open_action_items=open_action_items.count(),

@@ -12,10 +12,10 @@
         </tr>
         </thead>
         <tbody>
-        {% for key, count in resolved_last_week %}
+        {% for query in resolved_last_week %}
         <tr>
-            <td>{{key}}</td>
-            <td>{{count}}</td>
+            <td>{{query.day}}</td>
+            <td>{{query.n}}</td>
         </tr>
         {% endfor %}
         </tbody>

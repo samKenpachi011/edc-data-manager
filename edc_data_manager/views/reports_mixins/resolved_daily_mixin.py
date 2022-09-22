@@ -13,31 +13,16 @@ class ResolvedDailyMixin:
 
     @property
     def resolved_last_week(self):
-        items = DataActionItem.objects.filter(status='resolved', site_id=settings.SITE_ID)
-        resolved = []
-        for item in items:
-            init = [resolved.history_date for resolved in
-                    item.history.filter(status='resolved',
-                                        history_date__lte=datetime.datetime.today(),
-                                        history_date__gt=datetime.datetime.today() - datetime.timedelta(
-                                            days=7)) if
-                    getattr(resolved.prev_record, 'status') != 'resolved']
-            resolved.append(max(init).date())
-        rc = Counter()
-        rc.update(resolved)
-        return rc
+        return DataActionItem.objects.filter(
+            site_id=settings.SITE_ID, status='resolved', date_resolved__lte=datetime.datetime.today().date(),
+            date_resolved__gt=datetime.datetime.today().date() - datetime.timedelta(
+                days=7)).annotate(day=TruncDate('date_resolved'), ).values('day').annotate(
+            n=Count('id')).order_by('day')
 
     @property
     def closed_last_week(self):
-        cl_items = DataActionItem.objects.filter(status='closed')
-        closed = []
-        for item in cl_items:
-            init = [closed.history_date for closed in item.history.filter(
-                status='closed', history_date__lte=datetime.datetime.today(),
-                history_date__gt=datetime.datetime.today() - datetime.timedelta(
-                    days=7))
-                    if getattr(closed.prev_record, 'status') != 'closed']
-            closed.append(max(init).date())
-        cc = Counter()
-        cc.update(closed)
-        return cc
+        return DataActionItem.history.filter(
+            site_id=settings.SITE_ID, status=CLOSED, date_closed__lte=datetime.datetime.today().date(),
+            date_closed__gt=datetime.datetime.today().date() - datetime.timedelta(
+                days=7)).annotate(day=TruncDate('date_closed'), ).values('day').annotate(
+            n=Count('id')).order_by('day')
