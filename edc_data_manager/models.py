@@ -93,7 +93,6 @@ class ModelDiffMixin:
 
 
 class QueryName(BaseUuidModel):
-
     query_name = models.CharField(
         verbose_name="Name of the Query",
         max_length=200,
@@ -169,6 +168,16 @@ class DataActionItem(
         max_length=10,
         choices=SUBJECT_TYPES,
         default='subject')
+
+    date_resolved = models.DateField(
+        blank=True,
+        null=True,
+    )
+
+    date_closed = models.DateField(
+        blank=True,
+        null=True,
+    )
 
     objects = DataActionItemManager()
 

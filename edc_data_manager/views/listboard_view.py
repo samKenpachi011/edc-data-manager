@@ -16,15 +16,15 @@ from edc_dashboard.views import ListboardView
 from edc_dashboard.listboard_filter import ListboardFilter
 from requests import delete
 
+from .reports_mixins.resolved_daily_mixin import ResolvedDailyMixin
 from ..model_wrappers import DataActionItemModelWrapper
 from ..models import DataActionItem, QueryName
 from ..view_mixins import ListboardViewFilters, UserDetailsCheckViewMixin
 
 
-class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
+class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
                     ListboardFilterViewMixin, UserDetailsCheckViewMixin,
                     SearchFormViewMixin, ListboardView):
-
     listboard_template = 'data_manager_listboard_template'
     listboard_url = 'data_manager_listboard_url'
     listboard_panel_style = 'info'
@@ -72,6 +72,8 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
         closed_action_items = DataActionItem.objects.filter(status=CLOSED)
         
         context.update(
+            resolved_last_week=self.resolved_last_week,
+            closed_last_week=self.closed_last_week,
             query_summary=self.query_summary,
             export_add_url=self.model_cls().get_absolute_url(),
             open_action_items=open_action_items.count(),

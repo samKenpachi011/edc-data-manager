@@ -1,0 +1,23 @@
+{% load static %}
+
+<div class="panel-body">
+    <h3><b>Resolved Last Week</b></h3>
+    <hr>
+    <!-- end panel_action_buttons -->
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Day</th>
+            <th>Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for query in resolved_last_week %}
+        <tr>
+            <td>{{query.day}}</td>
+            <td>{{query.n}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

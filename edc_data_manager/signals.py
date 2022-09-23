@@ -1,6 +1,7 @@
 from django.apps import apps as django_apps
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from edc_base import get_utcnow
 
 from .models import DataActionItem
 
@@ -58,3 +59,21 @@ def data_action_item_on_post_save(sender, instance, raw, created, **kwargs):
                 else:
                     instance.email_users(
                         instance=instance, subject=subject, message=message)
+
+
+@receiver(pre_save, weak=False, sender=DataActionItem,
+          dispatch_uid='data_action_item_on_pre_save')
+def data_action_item_on_pre_save(sender, instance, raw, using, **kwargs):
+    if not raw:
+        if instance.status == 'resolved':
+            if instance.date_resolved is None:
+                instance.date_resolved = get_utcnow().date()
+            elif (instance.date_resolved and
+                  instance.history.latest('history_date').date_resolved):
+                instance.date_resolved = get_utcnow().date()
+        if instance.status == 'closed':
+            if instance.date_closed is None:
+                instance.date_closed = get_utcnow().date()
+            elif (instance.date_closed and
+                  instance.history.latest('history_date').date_closed):
+                instance.date_closed = get_utcnow().date()

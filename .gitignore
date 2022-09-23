@@ -17,3 +17,5 @@ db.sqlite3
 build
 *.egg-info
 __pycache__
+.idea
+edc_data_manager/migrations/*
