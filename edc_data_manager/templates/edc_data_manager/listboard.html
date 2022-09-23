@@ -12,115 +12,108 @@
 
 
 {% block extra_content%}
-<br>
+	<br>
 
 <div class="panel panel-info">
-    <div class="panel-heading">
-        <div class="panel-body">
-            <h3><b>Summary of Queries</b></h3>
-            <hr>
-            <!-- end panel_action_buttons -->
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">Query</th>
-                    <th scope="col">Gaborone</th>
-                    <th scope="col">Maun</th>
-                    <th scope="col">Serowe</th>
-                    <th scope="col">Francistown</th>
-                    <th scope="col">Selibe Phikwe</th>
-                    <th scope="col">Totals</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for query in query_summary %}
-                <tr>
-                    <th scope="row">{{ query.0 }}</th>
-                    <td>{{ query.1 }}</td>
-                    <td>{{ query.2 }}</td>
-                    <td>{{ query.3 }}</td>
-                    <td>{{ query.4 }}</td>
-                    <td>{{ query.5 }}</td>
-                    <td>{{ query.6 }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+  <div class="panel-heading">
+      <div class="panel-body">
+		<h3><b>Summary of Queries</b></h3>
+        <hr>
+       <!-- end panel_action_buttons -->  
+	       		<table class="table table-hover">
+				  <thead>
+				    <tr>
+				      <th scope="col">Query</th>
+				      <th scope="col">Gaborone</th>
+				      <th scope="col">Maun</th>
+				      <th scope="col">Serowe</th>
+				      <th scope="col">Francistown</th>
+					  <th scope="col">Selibe Phikwe</th>
+					  <th scope="col">Totals</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+					{% for query in query_summary %}
+				    <tr>
+				      <th scope="row">{{ query.0 }}</th>
+				      <td>{{ query.1 }}</td>
+				      <td>{{ query.2 }}</td>
+				      <td>{{ query.3 }}</td>
+				      <td>{{ query.4 }}</td>
+				      <td>{{ query.5 }}</td>
+					  <td>{{ query.6 }}</td>
+				    </tr>
+					{%  endfor %}
+				  </tbody>
+				</table>
+      </div>
+  </div>
 </div>
-
-<div class="panel panel-info">
-    <div class="panel-heading">
-        <div class="panel-body">
-            {% include './resolved_last_week.html' %}
-        </div>
-    </div>
-</div>
-
-<div class="panel panel-info">
-    <div class="panel-heading">
-        <div class="panel-body">
-            {% include './closed_last_week.html' %}
-        </div>
-    </div>
-</div>
-
 {% endblock extra_content %}
 
 
 {% block listboard_panel %}
-<a id="return_to_home" title="go back" class="btn btn-sm btn-default" role="button"
-   href="/">
-    <i class="fa fa-arrow-left fa-sm"></i> Go Back
-</a>
-Open issues <span class="float-right badge badge-light round">{{open_action_items}}</span>
-Stalled issues <span
-        class="float-right badge badge-light round">{{stalled_action_items}}</span>
-Resolved issues <span class="float-right badge badge-light round">{{resolved_action_items}}</span>
-Closed issues <span
-        class="float-right badge badge-light round">{{closed_action_items}}</span>
+    <a id="return_to_home" title="go back" class="btn btn-sm btn-default" role="button" 
+        href="/">
+            <i class="fa fa-arrow-left fa-sm"></i> Go Back
+    </a> 
+	<span style='margin-left: 3%'><a href="{% if request.GET.f and request.GET.status is None %} {{ request.get_full_path }}&status=open {% else %} ?status=open {% endif %}">Open issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{open_action_items}}</span></span>
+	<a href="{% if request.GET.f and request.GET.status is None  %} {{ request.get_full_path }}&status=stalled {% else %} ?status=stalled  {% endif %}">Stalled issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{stalled_action_items}}</span>
+	<a href="{% if request.GET.f and request.GET.status is None %} {{ request.get_full_path }}&status=resolved  {% else %} ?status=resolved {% endif %}">Resolved issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{resolved_action_items}}</span>
+	<a href="{% if request.GET.f and request.GET.status is None %} {{ request.get_full_path }}&status=closed {% else %} ?status=closed  {% endif %}">Closed issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{closed_action_items}}</span>
+
+	<br>
+
+	<div style="margin: 2%; padding: 3%; border: 1px solid black; border-radius: 5px; list-style: 3em;">
+		<span style="margin-right: 1%; margin-buttom: 3px;">
+				<a href="{% url 'edc_data_manager:data_manager_listboard_url'%}" style="color: red;"> <b>CLEAR ALL FILTERS</b> </a>
+		</span>
+		{% for query_name in query_names %}
+			<span style="margin-right: 1%; margin-buttom: 3px;">
+				<a href="{% if request.GET.f and request.GET.query_name is None %} {{ request.get_full_path }}&query_name={{query_name}} {% else %} ?query_name={{query_name}} {% endif %}"> {{ query_name }}</a>
+			</span>
+		{% endfor %}
+	</div>
 {% endblock listboard_panel %}
+
 {% block listboard_table_button_column %}
 {% endblock listboard_table_button_column %}
 
 {% block listboard_table_header %}
-<!-- begin results header -->
-<th>#</th>
-<th>Subject Identifier</th>
-<th>Buttons</th>
-<th>Status</th>
-<th>Assigned</th>
-<th>Action Priority</th>
-<th>Ticket number</th>
-<th>Subject</th>
-<th>Issue age (days)</th>
-<th>Created date</th>
-<!-- end results header -->
+    <!-- begin results header -->
+    <th>#</th>
+    <th>Subject Identifier</th>
+    <th>Buttons</th>
+    <th>Status</th>
+    <th>Assigned</th>
+    <th>Action Priority</th>
+    <th>Ticket number</th>
+    <th>Subject</th>
+    <th>Issue age (days)</th>
+    <th>Created date</th>
+    <!-- end results header -->
 {% endblock listboard_table_header %}
 
 
 {% block listboard_table_columns %}
-<td>{{ result.subject_identifier }}</td>
-<td style="white-space: nowrap">
+	<td>{{ result.subject_identifier }} </td>
+	<td style="white-space: nowrap">
     <div class="btn-group">
-        <a title="Edit data action item" role="button"
-           class="btn btn-default btn-sm"
+    <a title="Edit data action item" role="button" 
+       class="btn btn-default btn-sm"
            href="{{ result.href }}">
-            <i class="fa fa-pencil-alt fa-sm"></i>
-        </a>
-        <a id="btn-subject-dashboard-{{result.subject_identifier}}"
-           class="btn btn-primary btn-sm" role="button"
-           title="Go to subject's dashboard"
-           href="{% url result.object.dashboard_url result.subject_identifier %}">
-            <i class="far fa-user-circle fa-sm"></i> Dashboard <i class="fa fa-share"></i></a>
+        <i class="fa fa-pencil-alt fa-sm"></i>
+    </a>
+      <a id="btn-subject-dashboard-{{result.subject_identifier}}" class="btn btn-primary btn-sm" role="button"   
+     title="Go to subject's dashboard" href="{% url result.object.dashboard_url result.subject_identifier %}">
+     <i class="far fa-user-circle fa-sm"></i> Dashboard  <i class="fa fa-share"></i></a>
     </div>
-</td>
-<td>{{ result.status }}</td>
-<td>{{ result.assigned }}</td>
-<td>{{ result.action_priority }}</td>
-<td>{{result.issue_number}}</td>
-<td>{{result.object.snippet}}</td>
-<td>{{result.issue_age}}</td>
-<td nowrap>{{ result.date_created }}</td>
+      </td>
+	<td>{{ result.status }} </td>
+	<td>{{ result.assigned }} </td>
+	<td>{{ result.action_priority }} </td>
+	<td>{{result.issue_number}}</td>
+	<td>{{result.object.snippet}}</td>
+	<td>{{result.issue_age}}</td>
+    <td nowrap>{{ result.date_created  }}</td>
 {% endblock listboard_table_columns %}
