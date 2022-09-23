@@ -14,6 +14,7 @@ from edc_dashboard.view_mixins import (
     ListboardFilterViewMixin, SearchFormViewMixin)
 from edc_dashboard.views import ListboardView
 from edc_dashboard.listboard_filter import ListboardFilter
+from requests import delete
 
 from ..model_wrappers import DataActionItemModelWrapper
 from ..models import DataActionItem, QueryName
@@ -37,6 +38,7 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
     ordering = '-modified'
     paginate_by = 10
     search_form_url = 'data_manager_listboard_url'
+    
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -75,22 +77,48 @@ class ListBoardView(NavbarViewMixin, EdcBaseViewMixin,
             open_action_items=open_action_items.count(),
             stalled_action_items=stalled_action_items.count(),
             resolved_action_items=resolved_action_items.count(),
-            closed_action_items=closed_action_items.count())
+            closed_action_items=closed_action_items.count(),
+            query_names = self.get_query_names)
         return context
 
     def get_queryset_filter_options(self, request, *args, **kwargs):
         options = super().get_queryset_filter_options(request, *args, **kwargs)
-        if kwargs.get('subject_identifier'):
+        
+        del options['site'] # 
+        
+        if kwargs.get('subject_identifier', None):
             options.update(
                 {'subject_identifier': kwargs.get('subject_identifier')})
+            
+            
+        status = request.GET.get('status', None)
+        
+        query_name = request.GET.get('query_name', None)
+            
+        if status:
+            options.update(
+                {'status': status})
+            
+        if query_name:
+            options.update(
+                {'query_name': query_name})
+        
         return options
-
+    
     def extra_search_options(self, search_term):
         q = Q()
         if re.match('^[A-Z]+$', search_term):
             q = Q(first_name__exact=search_term)
         return q
-
+    
+    @property
+    def get_query_names(self):
+        
+        query_names = DataActionItem.objects.values_list('query_name', flat=True).distinct()
+        
+        return query_names
+    
+    
     def get_wrapped_queryset(self, queryset):
         """Returns a list of wrapped model instances.
         """

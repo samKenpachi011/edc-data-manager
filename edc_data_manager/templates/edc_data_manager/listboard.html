@@ -56,12 +56,26 @@
     <a id="return_to_home" title="go back" class="btn btn-sm btn-default" role="button" 
         href="/">
             <i class="fa fa-arrow-left fa-sm"></i> Go Back
-    </a>
-	Open issues <span class="float-right badge badge-light round">{{open_action_items}}</span>
-	Stalled issues <span class="float-right badge badge-light round">{{stalled_action_items}}</span>
-	Resolved issues <span class="float-right badge badge-light round">{{resolved_action_items}}</span>
-	Closed issues <span class="float-right badge badge-light round">{{closed_action_items}}</span>
+    </a> 
+	<span style='margin-left: 3%'><a href="{% if request.GET.f and request.GET.status is None %} {{ request.get_full_path }}&status=open {% else %} ?status=open {% endif %}">Open issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{open_action_items}}</span></span>
+	<a href="{% if request.GET.f and request.GET.status is None  %} {{ request.get_full_path }}&status=stalled {% else %} ?status=stalled  {% endif %}">Stalled issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{stalled_action_items}}</span>
+	<a href="{% if request.GET.f and request.GET.status is None %} {{ request.get_full_path }}&status=resolved  {% else %} ?status=resolved {% endif %}">Resolved issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{resolved_action_items}}</span>
+	<a href="{% if request.GET.f and request.GET.status is None %} {{ request.get_full_path }}&status=closed {% else %} ?status=closed  {% endif %}">Closed issues</a> <span style='margin-right: 3%' class="float-right badge badge-light round">{{closed_action_items}}</span>
+
+	<br>
+
+	<div style="margin: 2%; padding: 3%; border: 1px solid black; border-radius: 5px; list-style: 3em;">
+		<span style="margin-right: 1%; margin-buttom: 3px;">
+				<a href="{% url 'edc_data_manager:data_manager_listboard_url'%}" style="color: red;"> <b>CLEAR ALL FILTERS</b> </a>
+		</span>
+		{% for query_name in query_names %}
+			<span style="margin-right: 1%; margin-buttom: 3px;">
+				<a href="{% if request.GET.f and request.GET.query_name is None %} {{ request.get_full_path }}&query_name={{query_name}} {% else %} ?query_name={{query_name}} {% endif %}"> {{ query_name }}</a>
+			</span>
+		{% endfor %}
+	</div>
 {% endblock listboard_panel %}
+
 {% block listboard_table_button_column %}
 {% endblock listboard_table_button_column %}
 
