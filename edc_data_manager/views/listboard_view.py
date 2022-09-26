@@ -38,7 +38,6 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
     ordering = '-modified'
     paginate_by = 10
     search_form_url = 'data_manager_listboard_url'
-    
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -66,11 +65,14 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        open_action_items = DataActionItem.objects.filter(status=OPEN)
-        stalled_action_items = DataActionItem.objects.filter(status='stalled')
-        resolved_action_items = DataActionItem.objects.filter(status='resolved')
-        closed_action_items = DataActionItem.objects.filter(status=CLOSED)
-        
+        open_action_items = DataActionItem.objects.filter(
+            status=OPEN, site_id=self.site_id)
+        stalled_action_items = DataActionItem.objects.filter(
+            status='stalled', site_id=self.site_id)
+        resolved_action_items = DataActionItem.objects.filter(
+            status='resolved', site_id=self.site_id)
+        closed_action_items = DataActionItem.objects.filter(
+            status=CLOSED, site_id=self.site_id)
         context.update(
             resolved_last_week=self.resolved_last_week,
             closed_last_week=self.closed_last_week,
@@ -80,47 +82,42 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
             stalled_action_items=stalled_action_items.count(),
             resolved_action_items=resolved_action_items.count(),
             closed_action_items=closed_action_items.count(),
-            query_names = self.get_query_names)
+            query_names=self.get_query_names)
         return context
 
     def get_queryset_filter_options(self, request, *args, **kwargs):
         options = super().get_queryset_filter_options(request, *args, **kwargs)
-        
-        del options['site'] # 
-        
+
+        del options['site']
+
         if kwargs.get('subject_identifier', None):
             options.update(
                 {'subject_identifier': kwargs.get('subject_identifier')})
-            
-            
+
         status = request.GET.get('status', None)
-        
+
         query_name = request.GET.get('query_name', None)
-            
+
         if status:
             options.update(
                 {'status': status})
-            
+
         if query_name:
             options.update(
                 {'query_name': query_name})
-        
         return options
-    
+
     def extra_search_options(self, search_term):
         q = Q()
         if re.match('^[A-Z]+$', search_term):
             q = Q(first_name__exact=search_term)
         return q
-    
+
     @property
     def get_query_names(self):
-        
         query_names = DataActionItem.objects.values_list('query_name', flat=True).distinct()
-        
         return query_names
-    
-    
+
     def get_wrapped_queryset(self, queryset):
         """Returns a list of wrapped model instances.
         """
@@ -136,3 +133,7 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
             object_list.append(self.model_wrapper_cls(obj,
                                                       next_url_name=next_url_name))
         return object_list
+
+    @property
+    def site_id(self):
+        return settings.SITE_ID
