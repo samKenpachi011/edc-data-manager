@@ -48,15 +48,16 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
         """Return a summary of quesries
         """
         data = []
-        qs_categories = DataActionItem.objects.all().values_list('query_name', flat=True)
+        qs_categories = DataActionItem.objects.values_list('query_name', flat=True)
         qs_categories = list(set(qs_categories))
+        active_queries = DataActionItem.objects.filter(status__in=['resolved', 'stalled', OPEN])
         for query_name in qs_categories:
-            qs_gabs = DataActionItem.objects.filter(site__id=40, query_name=query_name)
-            qs_maun = DataActionItem.objects.filter(site__id=41, query_name=query_name)
-            qs_serowe = DataActionItem.objects.filter(site__id=42, query_name=query_name)
-            qs_gheto = DataActionItem.objects.filter(site__id=43, query_name=query_name)
-            qs_sphikwe = DataActionItem.objects.filter(site__id=44, query_name=query_name)
-            qs = DataActionItem.objects.filter(query_name=query_name)
+            qs_gabs = active_queries.filter(site__id=40, query_name=query_name)
+            qs_maun = active_queries.filter(site__id=41, query_name=query_name)
+            qs_serowe = active_queries.filter(site__id=42, query_name=query_name)
+            qs_gheto = active_queries.filter(site__id=43, query_name=query_name)
+            qs_sphikwe = active_queries.filter(site__id=44, query_name=query_name)
+            qs = active_queries.filter(query_name=query_name)
             data.append([
                 query_name, qs_gabs.count(), qs_maun.count(),
                 qs_serowe.count(), qs_gheto.count(), qs_sphikwe.count(),
