@@ -153,6 +153,7 @@ class DataActionItem(
 
     assigned = models.CharField(
         verbose_name="Assign to",
+        null=True,
         max_length=50,)
 
     status = models.CharField(

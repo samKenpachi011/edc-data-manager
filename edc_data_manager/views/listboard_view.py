@@ -133,6 +133,7 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
             else:
                 next_url_name = settings.DASHBOARD_URL_NAMES.get(
                     'subject_dashboard_url')
-            object_list.append(self.model_wrapper_cls(obj,
-                                                      next_url_name=next_url_name))
+            if obj.site_id==settings.SITE_ID:
+                object_list.append(self.model_wrapper_cls(obj,
+                                                          next_url_name=next_url_name))
         return object_list
