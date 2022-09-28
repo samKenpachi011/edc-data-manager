@@ -105,7 +105,6 @@
     <th>Ticket number</th>
     <th>Subject</th>
     <th>Issue age (days)</th>
-    <th>Created date</th>
     <!-- end results header -->
 {% endblock listboard_table_header %}
 
@@ -130,5 +129,4 @@
 	<td>{{result.issue_number}}</td>
 	<td>{{result.object.snippet}}</td>
 	<td>{{result.issue_age}}</td>
-    <td nowrap>{{ result.date_created  }}</td>
 {% endblock listboard_table_columns %}
