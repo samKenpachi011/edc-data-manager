@@ -50,7 +50,8 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
         data = []
         qs_categories = DataActionItem.objects.values_list('query_name', flat=True)
         qs_categories = list(set(qs_categories))
-        active_queries = DataActionItem.objects.filter(status__in=['resolved', 'stalled', OPEN])
+        active_queries = DataActionItem.objects.filter(
+            status__in=['resolved', 'stalled', OPEN])
         for query_name in qs_categories:
             qs_gabs = active_queries.filter(site__id=40, query_name=query_name)
             qs_maun = active_queries.filter(site__id=41, query_name=query_name)
@@ -116,7 +117,8 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
 
     @property
     def get_query_names(self):
-        query_names = DataActionItem.objects.values_list('query_name', flat=True).distinct()
+        query_names = DataActionItem.objects.values_list('query_name',
+                                                         flat=True).distinct()
         return query_names
 
     def get_wrapped_queryset(self, queryset):
@@ -131,8 +133,9 @@ class ListBoardView(NavbarViewMixin, ResolvedDailyMixin, EdcBaseViewMixin,
             else:
                 next_url_name = settings.DASHBOARD_URL_NAMES.get(
                     'subject_dashboard_url')
-            object_list.append(self.model_wrapper_cls(obj,
-                                                      next_url_name=next_url_name))
+            if obj.site_id == settings.SITE_ID:
+                object_list.append(self.model_wrapper_cls(obj,
+                                                          next_url_name=next_url_name))
         return object_list
 
     @property
