@@ -187,12 +187,28 @@ class DataActionItem(
 
     @property
     def dashboard_url(self):
-        app_config = django_apps.get_app_config('edc_data_manager')
-        if self.subject_type == 'infant':
-            return settings.DASHBOARD_URL_NAMES.get(
-                app_config.infant_dashboard_url)
-        return settings.DASHBOARD_URL_NAMES.get(
-            app_config.subject_dashboard_url)
+        """
+        To generate dashboard url
+        """
+        
+        # href to remain # to avoid redirecting if url is not generated
+        generated_url = '#'
+        
+        if self.subject_identifier:
+            """
+            Subject Dashboard does not exist, without a pid
+            """
+            if self.subject_type == 'infant':
+                url = settings.DASHBOARD_URL_NAMES.get(
+                    'infant_subject_dashboard_url')
+            else:
+                url = settings.DASHBOARD_URL_NAMES.get(
+                    'subject_dashboard_url')
+            
+            # generate url for the dashboard otherise #
+            generated_url = reverse(url, args=[self.subject_identifier,])
+        
+        return generated_url
 
     @property
     def query_names(self):
