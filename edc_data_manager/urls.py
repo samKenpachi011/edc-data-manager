@@ -21,6 +21,6 @@ data_manager_listboard_url_config = UrlConfig(
     view_class=ListBoardView,
     label='data_manager_listboard',
     identifier_label='subject_identifier',
-    identifier_pattern=app_config.identifier_pattern)
+    identifier_pattern=app_config.identifier_pattern or '.*')
 
 urlpatterns += data_manager_listboard_url_config.listboard_urls
