@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models
+from django.urls import reverse
 from django.forms.models import model_to_dict
 from django_crypto_fields.fields import EncryptedTextField
 from edc_base.model_mixins.base_uuid_model import BaseUuidModel
@@ -200,13 +201,14 @@ class DataActionItem(
             """
             if self.subject_type == 'infant':
                 url = settings.DASHBOARD_URL_NAMES.get(
-                    'infant_subject_dashboard_url')
+                    'child_dashboard_url')
             else:
                 url = settings.DASHBOARD_URL_NAMES.get(
                     'subject_dashboard_url')
-            
-            # generate url for the dashboard otherise #
-            generated_url = reverse(url, args=[self.subject_identifier,])
+                
+            if url:
+                # generate url for the dashboard otherise #
+                generated_url = reverse(url, args=[self.subject_identifier,])
         
         return generated_url
 
