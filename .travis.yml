@@ -2,8 +2,8 @@ os: linux
 dist: focal
 language: python
 
-env:
-  - DJANGO_VERSION=4.1.0
+python:
+  - "3.11"
 
 addons:
   apt:
@@ -19,24 +19,24 @@ addons:
 services:
   - mysql
 
-before_install:
-    - "export DISPLAY=:99.0"
-    - "sh -e /etc/init.d/xvfb start"
-    - sleep 3 # give xvfb some time to start
+# before_install:
+#     - "export DISPLAY=:99.0"
+#     - "sh -e /etc/init.d/xvfb start"
+#     - sleep 3 # give xvfb some time to start
 
-virtualenv:
-  system_site_packages: true
+# virtualenv:
+#   system_site_packages: true
 
 install:
   - pip install --upgrade pip
-  - pip install -q Django==$DJANGO_VERSION
+  - pip install Django
   - pip install flake8
   - pip install coveralls
   - pip install M2Crypto
   - pip install pyodbc
   - pip install pycups
   - pip install mysql-python
-  - pip install -q -r requirements.txt
+  - pip install -r requirements.txt
 
 before_script:
   - flake8 edc_data_manager
