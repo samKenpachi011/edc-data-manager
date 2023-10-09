@@ -8,13 +8,13 @@ env:
 addons:
   apt:
     packages:
-    - swig
-    - libssl-dev
-    - libssl0.9.8
-    - python-m2crypto
     - libcups2-dev
-    - unixodbc-dev
-    - python-mysqldb
+    # - swig
+    # - libssl-dev
+    # - libssl0.9.8
+    # - python-m2crypto
+    # - unixodbc-dev
+    # - python-mysqldb
 
 services:
   - mysql
