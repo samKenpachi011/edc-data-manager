@@ -32,10 +32,10 @@ install:
   - pip install Django
   - pip install flake8
   - pip install coveralls
-  - pip install M2Crypto
-  - pip install pyodbc
-  - pip install pycups
-  - pip install mysql-python
+  # - pip install M2Crypto
+  # - pip install pyodbc
+  # - pip install pycups
+  # - pip install mysql-python
   - pip install -r requirements.txt
 
 before_script:
