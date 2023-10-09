@@ -1,4 +1,5 @@
 from django.apps import AppConfig as DjangoAppConfig
+from edc_constants.constants import NONE
 
 
 class AppConfig(DjangoAppConfig):
@@ -15,6 +16,10 @@ class AppConfig(DjangoAppConfig):
     assignable_users_group = 'assignable users'
     assianable_users_note = False
     email_issue_notification = False
+    
+    # Dashboard urls
+    infant_dashboard_url = None
+    subject_dashboard_url = None
     child_subject = False
 
     def ready(self):

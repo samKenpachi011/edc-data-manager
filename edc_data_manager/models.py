@@ -162,6 +162,7 @@ class DataActionItem(
 
     @property
     def dashboard_url(self):
+        app_config = django_apps.get_app_config('edc_data_manager')
         if self.subject_type == 'infant':
             dashboard_url = settings.DASHBOARD_URL_NAMES.get(
                 'infant_subject_dashboard_url')
