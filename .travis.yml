@@ -1,30 +1,26 @@
+os: linux
+dist: focal
 language: python
-python:
-  - "2.7"
-#  - "3.2"
-#  - "3.3"
-#  - "3.4"
-#  - "nightly"
+
 env:
-  - DJANGO_VERSION=1.6
-#  - DJANGO_VERSION=1.7
-#  - DJANGO_VERSION=1.8
+  - DJANGO_VERSION=4.1.0
 
 addons:
-  apt_packages:
-     - swig
-     - libssl-dev
-     - libssl0.9.8
-     - python-m2crypto
-     - libcups2-dev
-     - unixodbc-dev
-     - python-mysqldb
+  apt:
+    packages:
+    - swig
+    - libssl-dev
+    - libssl0.9.8
+    - python-m2crypto
+    - libcups2-dev
+    - unixodbc-dev
+    - python-mysqldb
 
 services:
   - mysql
 
 before_install:
-    - "export DISPLAY=:99.0"                         
+    - "export DISPLAY=:99.0"
     - "sh -e /etc/init.d/xvfb start"
     - sleep 3 # give xvfb some time to start
 
@@ -47,8 +43,9 @@ before_script:
   - mysql -e 'create database edc;'
   - mysql -e 'create database edc_lab;'
 
-script: 
-  - coverage run --source=edc_data_manager manage.py test
+script:
+- python manage.py check
+- coverage run manage.py test
 
 after_success:
   - coveralls

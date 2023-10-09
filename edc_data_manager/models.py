@@ -15,7 +15,7 @@ from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
 
-from .choices import SUBJECT_TYPES
+# from .choices import SUBJECT_TYPES
 
 app_config = django_apps.get_app_config('edc_data_manager')
 
@@ -128,10 +128,10 @@ class DataActionItem(
             'Only data managers or study physicians '
             'can \'close\' an action item'))
 
-    subject_type = models.CharField(
-        max_length=10,
-        choices=SUBJECT_TYPES,
-        default='subject')
+    # subject_type = models.CharField(
+    #     max_length=10,
+    #     choices=SUBJECT_TYPES,
+    #     default='subject')
 
     objects = models.Manager()
 
@@ -165,7 +165,7 @@ class DataActionItem(
         if self.subject_type == 'infant':
             dashboard_url = settings.DASHBOARD_URL_NAMES.get(
                 'infant_subject_dashboard_url')
-            if not  dashboard_url:
+            if not dashboard_url:
                 dashboard_url = settings.DASHBOARD_URL_NAMES.get(
                     'child_dashboard_url')
         else:
