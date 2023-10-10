@@ -33,7 +33,7 @@ ETC_DIR = '/etc/'
 
 SITE_ID = 1
 
-KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+# KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 
 # Application definition
 
