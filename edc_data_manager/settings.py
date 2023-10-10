@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'w^k+nty=&d-)qvc^mn_eo&c7-*^v7-e)f_kk&gbrpiv-d)6x(4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -33,9 +33,9 @@ ETC_DIR = '/etc/'
 
 SITE_ID = 1
 
-# KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
-DJANGO_AUTO_CREATE_KEYS = True
-KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
+KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+
+# KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
 # Application definition
 
 INSTALLED_APPS = [
