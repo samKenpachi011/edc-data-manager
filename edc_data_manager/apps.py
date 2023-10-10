@@ -16,7 +16,7 @@ class AppConfig(DjangoAppConfig):
     assignable_users_group = 'assignable users'
     assianable_users_note = False
     email_issue_notification = False
-    
+
     # Dashboard urls
     infant_dashboard_url = None
     subject_dashboard_url = None
