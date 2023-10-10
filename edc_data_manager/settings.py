@@ -34,7 +34,8 @@ ETC_DIR = '/etc/'
 SITE_ID = 1
 
 # KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
-
+DJANGO_AUTO_CREATE_KEYS = True
+KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
 # Application definition
 
 INSTALLED_APPS = [
