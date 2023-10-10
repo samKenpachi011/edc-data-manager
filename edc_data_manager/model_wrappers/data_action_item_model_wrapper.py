@@ -10,7 +10,7 @@ class DataActionItemModelWrapper(ModelWrapper):
     next_url_name = settings.DASHBOARD_URL_NAMES.get(
         'subject_dashboard_url')
 
-    property
+    @property
     def age(self):
         """Returns the ticket age.
         """

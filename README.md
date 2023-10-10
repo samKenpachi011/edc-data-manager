@@ -1,4 +1,12 @@
-[![Build Status](https://travis-ci.org/botswana-harvard/edc-registration.svg?branch=develop)](https://travis-ci.org/botswana-harvard/edc-registration) [![Coverage Status](https://coveralls.io/repos/github/botswana-harvard/edc-data-manager/badge.svg?branch=develop)](https://coveralls.io/github/botswana-harvard/edc-data-manager?branch=develop)
+[![Build Status](https://app.travis-ci.com/samKenpachi011/edc-data-manager.svg?branch=develop)](https://app.travis-ci.com/samKenpachi011/edc-data-manager)
+
+[![Coverage Status](https://coveralls.io/repos/github/samKenpachi011/edc-data-manager/badge.svg?branch=develop)](https://coveralls.io/github/samKenpachi011/edc-data-manager?branch=develop)
+
+[![Language](https://img.shields.io/badge/Language-Python-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](https://github.com/samKenpachi011/edc-data-manager/releases/tag/v1.0.0)
+[![Log Scan Status](https://img.shields.io/badge/Log%20Scan-Passing-brightgreen.svg)](https://app.travis-ci.com/github/samKenpachi011/edc-data-manager/logscans)
+
 
 # edc-data-manager
 
@@ -11,8 +19,8 @@ Data manager classes
 
 To customise choices for assignees do the following:
 
-### `Usage` 
-	
+### `Usage`
+
 	from edc_data_manager.apps import AppConfig as BaseEdcDataManagerAppConfig
 
 	class EdcDataManagerAppConfig(BaseEdcDataManagerAppConfig):
@@ -40,4 +48,3 @@ How it works
 ----------
 
 Refer to the home page after installation for useage.
-

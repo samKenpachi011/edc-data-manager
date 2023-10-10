@@ -162,12 +162,16 @@ class DataActionItem(
 
     @property
     def dashboard_url(self):
-        app_config = django_apps.get_app_config('edc_data_manager')
         if self.subject_type == 'infant':
-            return settings.DASHBOARD_URL_NAMES.get(
-                app_config.infant_dashboard_url)
-        return settings.DASHBOARD_URL_NAMES.get(
-            app_config.subject_dashboard_url)
+            dashboard_url = settings.DASHBOARD_URL_NAMES.get(
+                'infant_subject_dashboard_url')
+            if not dashboard_url:
+                dashboard_url = settings.DASHBOARD_URL_NAMES.get(
+                    'child_dashboard_url')
+        else:
+            dashboard_url = settings.DASHBOARD_URL_NAMES.get(
+                'subject_dashboard_url')
+        return dashboard_url
 
     @property
     def assign_users(self):
