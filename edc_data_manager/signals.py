@@ -1,7 +1,7 @@
 from django.apps import apps as django_apps
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from .models import DataActionItem
 from django.contrib.auth.models import User
 
