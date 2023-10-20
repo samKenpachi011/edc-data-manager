@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.test import TestCase, tag
 
 from .models import DataActionItem
 
@@ -37,29 +37,30 @@ class TestDataActionItem(TestCase):
             self.assertEqual(data_action_item.issue_number, count)
             count += 1
 
-    # def test_user_assigned(self):
-    #     """Test that an issue can not be created if user assigned does not exists.
-    #     """
-    #     options = {
-    #         'subject_identifier': '123124',
-    #         'comment': 'This participant need to take PBMC for storage',
-    #         'user_created': self.user_created.username}
-    #     with self.assertRaises(ValidationError) as error:
-    #         DataActionItem.objects.create(**options)
-    #     self.assertEqual(
-    #         error.exception.message,
-    #         'The user  that you have assigned the data issue 1 does not exist.')
+    @tag('vv')
+    def test_user_assigned(self):
+        """Test that an issue can not be created if user assigned does not exists.
+        """
+        options = {
+            'subject_identifier': '123124',
+            'comment': 'This participant need to take PBMC for storage',
+            'user_created': self.user_created.username}
+        with self.assertRaises(ObjectDoesNotExist) as error:
+            DataActionItem.objects.create(**options)
+        self.assertEqual(
+            error.exception.args[0],
+            'User does not exist')
 
-    # def test_user_assigning(self):
-    #     """Test that an issue can not be created if the user
-    #     assigning does not exists as a django user.
-    #     """
-    #     options = {
-    #         'subject_identifier': '123124',
-    #         'comment': 'This participant need to take PBMC for storage',
-    #         'assigned': self.assigned_user.username}
-    #     with self.assertRaises(ValidationError) as error:
-    #         DataActionItem.objects.create(**options)
-    #     self.assertEqual(
-    #         error.exception.message,
-    #         'The user  that created the data issue 1 does not exist.')
+    def test_user_assigning(self):
+        """Test that an issue can not be created if the user
+        assigning does not exists as a django user.
+        """
+        options = {
+            'subject_identifier': '123124',
+            'comment': 'This participant need to take PBMC for storage',
+            'assigned': self.assigned_user.username}
+        with self.assertRaises(ObjectDoesNotExist) as error:
+            DataActionItem.objects.create(**options)
+        self.assertEqual(
+            error.exception.args[0],
+            'The user that created the data issue 1 does not exist.')
